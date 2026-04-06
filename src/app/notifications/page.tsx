@@ -27,6 +27,17 @@ type NotificationRow = {
   read_at: string | null;
 };
 
+/** One thread per person — avoids counting multiple message alerts from the same match as separate “conversations”. */
+function distinctUnreadCount(rows: NotificationRow[], kind: string): number {
+  const withActor = new Set(
+    rows
+      .filter((n) => n.kind === kind && n.read_at === null && n.actor_id)
+      .map((n) => n.actor_id as string),
+  );
+  const withoutActor = rows.filter((n) => n.kind === kind && n.read_at === null && !n.actor_id).length;
+  return withActor.size + withoutActor;
+}
+
 export default async function NotificationsPage() {
   if (!isSupabaseConfigured()) redirect("/?error=supabase");
   const supabase = await createClient();
@@ -96,12 +107,8 @@ export default async function NotificationsPage() {
     };
   });
   const unreadCount = notifications.filter((n) => n.read_at === null).length;
-  const unreadMessageAlerts = notifications.filter(
-    (n) => n.kind === "message_received" && n.read_at === null,
-  ).length;
-  const unreadMatchAlerts = notifications.filter(
-    (n) => n.kind === "match_created" && n.read_at === null,
-  ).length;
+  const unreadMessageAlerts = distinctUnreadCount(notifications, "message_received");
+  const unreadMatchAlerts = distinctUnreadCount(notifications, "match_created");
   const { data: viewerProfile } = await supabase
     .from("profiles")
     .select("role, niche, goal, looking_for, latitude, longitude")
@@ -147,8 +154,8 @@ export default async function NotificationsPage() {
         <div className="mb-6 rounded-2xl border border-amber-500/25 bg-amber-500/10 p-4">
           <p className="text-sm font-semibold text-amber-100">
             {unreadMessageAlerts === 1
-              ? "A conversation is waiting on you."
-              : `${unreadMessageAlerts} conversations are waiting on you.`}
+              ? "Someone is waiting on you in Messages."
+              : `${unreadMessageAlerts} people are waiting on you in Messages.`}
           </p>
           <p className="mt-1 text-sm text-amber-100/80">
             Open Messages and reply while the thread is still warm.

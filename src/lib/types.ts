@@ -83,6 +83,8 @@ export type DbProfile = {
   onboarding_completed_at: string | null;
   /** App open / heartbeat; distinct from profile edit `updated_at`. */
   last_seen_at?: string | null;
+  /** Extra public photos on `/p/[id]` (HTTPS URLs, max 6 in app). */
+  gallery_image_urls?: unknown;
   updated_at?: string | null;
   star_beat_title?: string | null;
   star_beat_audio_url?: string | null;

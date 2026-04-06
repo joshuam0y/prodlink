@@ -160,7 +160,7 @@ export default async function MatchesPage({
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, display_name, avatar_url, role, city, niche, updated_at")
+    .select("id, display_name, avatar_url, role, city, niche, updated_at, last_seen_at")
     .in("id", matchIds);
   type MiniProfile = {
     id: string;
@@ -170,6 +170,7 @@ export default async function MatchesPage({
     city: string | null;
     niche: string | null;
     updated_at: string | null;
+    last_seen_at: string | null;
   };
   const byId = new Map(
     (profiles as MiniProfile[] | null | undefined ?? []).map((p) => [p.id, p]),
@@ -187,6 +188,7 @@ export default async function MatchesPage({
       read_at: (m.read_at as string | null) ?? null,
     }));
     const ms = computePeerLastActivityMs({
+      lastSeenAtIso: p?.last_seen_at ?? null,
       profileUpdatedAtIso: p?.updated_at ?? null,
       messages: threadMessages,
       peerId,

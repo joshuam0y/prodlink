@@ -13,6 +13,7 @@ import { ProfileBasicsForm } from "./profile-basics-form";
 import { ProfileBeatsForm } from "./profile-beats-form";
 import { ProfileLocationForm } from "./profile-location-form";
 import { ProfilePrivacySocialForm } from "./profile-privacy-social-form";
+import { ProfileGalleryForm } from "./profile-gallery-form";
 import { ProfileVenuePhotosForm } from "./profile-venue-photos-form";
 
 export default async function ProfilePage() {
@@ -32,7 +33,7 @@ export default async function ProfilePage() {
   const { data: row, error } = await supabase
     .from("profiles")
     .select(
-      "id, created_at, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, niche, goal, city, neighborhood, latitude, longitude, location_radius_km, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, last_seen_at, updated_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
+      "id, created_at, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, niche, goal, city, neighborhood, latitude, longitude, location_radius_km, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, last_seen_at, updated_at, gallery_image_urls, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
     )
     .eq("id", user.id)
     .maybeSingle();
@@ -227,6 +228,12 @@ export default async function ProfilePage() {
       ) : null}
 
       <ProfileAvatarForm initialUrl={profile?.avatar_url?.trim() ?? ""} />
+      {!incomplete ? (
+        <ProfileGalleryForm
+          key={`gallery-${profile?.updated_at ?? ""}`}
+          initialUrls={profile?.gallery_image_urls}
+        />
+      ) : null}
       <ProfileBasicsForm
         initial={{
           displayName: profile?.display_name?.trim() ?? "",

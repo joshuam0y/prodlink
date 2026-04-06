@@ -224,12 +224,12 @@ export default async function LikesPage({
 
       <section className="mt-12">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
-          You liked
+          Likes you sent
         </h2>
         {youLikedIds.length === 0 ? (
           <p className="mt-4 text-sm text-zinc-500">
             {matchIds.length > 0
-              ? "Everyone you’ve recently liked either matched with you (see Mutual matches) or hasn’t swiped yet."
+              ? "People you’ve liked recently either matched with you (see Mutual matches) or haven’t swiped yet."
               : "No outgoing likes yet."}
           </p>
         ) : (

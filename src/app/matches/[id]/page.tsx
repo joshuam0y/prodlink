@@ -43,7 +43,7 @@ export default async function MatchConversationPage({ params, searchParams }: Pr
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, display_name, avatar_url, role, city, niche, looking_for, updated_at")
+    .select("id, display_name, avatar_url, role, city, niche, looking_for, updated_at, last_seen_at")
     .eq("id", id)
     .maybeSingle();
   if (!profile) notFound();
@@ -72,6 +72,7 @@ export default async function MatchConversationPage({ params, searchParams }: Pr
     read_at: (m.read_at as string | null) ?? null,
   }));
   const peerActivityMs = computePeerLastActivityMs({
+    lastSeenAtIso: profile.last_seen_at ?? null,
     profileUpdatedAtIso: profile.updated_at ?? null,
     messages: threadForActivity,
     peerId: id,

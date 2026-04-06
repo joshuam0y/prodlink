@@ -38,9 +38,11 @@ type ActivityMessage = {
   read_at: string | null;
 };
 
-/** Best-effort “last seen” time for a peer: profile edits, their sends, or when they read your messages. */
+/** Best-effort “last seen” time for a peer: app heartbeat, profile edits, their sends, or when they read your messages. */
 export function computePeerLastActivityMs(params: {
   profileUpdatedAtIso?: string | null;
+  /** Client heartbeat while signed in (`profiles.last_seen_at`). */
+  lastSeenAtIso?: string | null;
   messages: ActivityMessage[];
   peerId: string;
   selfId: string;
@@ -51,6 +53,7 @@ export function computePeerLastActivityMs(params: {
     const t = new Date(iso).getTime();
     if (!Number.isNaN(t)) ms = Math.max(ms, t);
   };
+  bump(params.lastSeenAtIso);
   bump(params.profileUpdatedAtIso);
   for (const m of params.messages) {
     if (m.sender_id === params.peerId) bump(m.created_at);

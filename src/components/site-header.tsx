@@ -89,12 +89,17 @@ export function SiteHeader({
     }, 15000);
     window.addEventListener("focus", refreshCounts);
     document.addEventListener("visibilitychange", onVisibilityChange);
+    const onUnreadCountsRefresh = () => {
+      void refreshCounts();
+    };
+    window.addEventListener("prodlink:unread-counts-refresh", onUnreadCountsRefresh);
 
     return () => {
       isActive = false;
       window.clearInterval(intervalId);
       window.removeEventListener("focus", refreshCounts);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("prodlink:unread-counts-refresh", onUnreadCountsRefresh);
     };
   }, [supabaseEnabled, user]);
 

@@ -14,6 +14,7 @@ import { isAiProfileCoachConfigured, isSupabaseConfigured } from "@/lib/env";
 import type { DbExtraBeat } from "@/lib/profile-beats";
 import type { PublicVisibilityKey } from "@/lib/public-visibility";
 import { validateSocialLinksForSave, type SocialLink } from "@/lib/social-links";
+import { parseGalleryImageUrls } from "@/lib/profile-gallery";
 import {
   hasAnyCompletePrompt,
   hasDuplicatePromptQuestions,
@@ -523,6 +524,39 @@ export async function updateProfileBasics(
 
   revalidatePath("/profile");
   revalidatePath("/explore");
+  revalidatePath(`/p/${user.id}`);
+  return { ok: true };
+}
+
+const MAX_GALLERY_IMAGES = 6;
+
+export async function updateProfileGalleryImages(
+  urls: string[],
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (!isSupabaseConfigured()) {
+    return { ok: false, error: "Supabase is not configured." };
+  }
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Sign in to update your photos." };
+
+  const cleaned = parseGalleryImageUrls(urls);
+  if (cleaned.length > MAX_GALLERY_IMAGES) {
+    return { ok: false, error: `You can add up to ${MAX_GALLERY_IMAGES} extra photos.` };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      gallery_image_urls: cleaned,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", user.id);
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/profile");
   revalidatePath(`/p/${user.id}`);
   return { ok: true };
 }

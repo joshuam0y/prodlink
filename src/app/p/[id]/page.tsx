@@ -12,6 +12,7 @@ import { isUuid } from "@/lib/uuid";
 import type { DbProfile } from "@/lib/types";
 import { formatDisplayDate } from "@/lib/format-date";
 import { isPublicFieldVisible } from "@/lib/public-visibility";
+import { parseGalleryImageUrls } from "@/lib/profile-gallery";
 import { parseSocialLinks } from "@/lib/social-links";
 import { ProfileAvatarModal, ProfileGallery, ProfileGalleryModal } from "./gallery";
 
@@ -100,7 +101,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
   const { data: row, error } = await supabase
     .from("profiles")
     .select(
-      "id, created_at, last_seen_at, updated_at, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
+      "id, created_at, last_seen_at, updated_at, display_name, avatar_url, gallery_image_urls, ai_summary, ai_tags, ai_profile_score, role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
     )
     .eq("id", id)
     .maybeSingle();
@@ -242,8 +243,13 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
       </div>
     </InfoSection>
   ) : null;
+  const extraGalleryPhotos = parseGalleryImageUrls(profile.gallery_image_urls).map((url, i) => ({
+    url,
+    label: `${name} photo ${i + 1}`,
+  }));
   const galleryItems = [
     ...(profile.avatar_url?.trim() ? [{ url: profile.avatar_url.trim(), label: `${name} profile photo` }] : []),
+    ...extraGalleryPhotos,
     ...(showBeats && starBeat?.coverUrl ? [{ url: starBeat.coverUrl, label: starBeat.title }] : []),
     ...(showBeats
       ? (extraBeats ?? []).filter((b) => Boolean(b.coverUrl)).map((b) => ({ url: b.coverUrl, label: b.title }))

@@ -42,7 +42,10 @@ export function NotificationsList({ notifications }: Props) {
     );
     if (!shouldRequest) return;
     try {
-      await fetch(`/api/notifications/${id}/read`, { method: "POST" });
+      const res = await fetch(`/api/notifications/${id}/read`, { method: "POST" });
+      if (res.ok && typeof window !== "undefined") {
+        window.dispatchEvent(new Event("prodlink:unread-counts-refresh"));
+      }
     } catch {
       // Optimistic update only.
     }
