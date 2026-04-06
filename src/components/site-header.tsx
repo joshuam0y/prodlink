@@ -4,6 +4,18 @@ import type { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { IconType } from "react-icons";
+import {
+  HiOutlineBell,
+  HiOutlineBookOpen,
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineCube,
+  HiOutlineHeart,
+  HiOutlineLifebuoy,
+  HiOutlineMagnifyingGlass,
+  HiOutlineUserCircle,
+} from "react-icons/hi2";
+import { useThemeSetting } from "@/components/theme-provider";
 import { signOut } from "@/app/auth/actions";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { ProfileAvatar } from "@/components/profile-avatar";
@@ -22,6 +34,18 @@ const allNavLinks = [
   { href: "/help", label: "Help" },
   { href: "/onboarding", label: "Profile", hideWhenProfileComplete: true },
 ] as const;
+
+const navLinkIcon: Partial<Record<string, IconType>> = {
+  "/explore": HiOutlineMagnifyingGlass,
+  "/likes": HiOutlineHeart,
+  "/matches": HiOutlineChatBubbleLeftRight,
+  "/notifications": HiOutlineBell,
+  "/bundles": HiOutlineCube,
+  "/how-it-works": HiOutlineBookOpen,
+  "/help": HiOutlineLifebuoy,
+  "/onboarding": HiOutlineUserCircle,
+  "/profile": HiOutlineUserCircle,
+};
 
 type Props = {
   user: User | null;
@@ -43,10 +67,13 @@ export function SiteHeader({
   unreadNotifications = 0,
   showBuildProfileNav = true,
 }: Props) {
+  const { theme } = useThemeSetting();
   const [counts, setCounts] = useState({
     unreadMessages,
     unreadNotifications,
   });
+
+  const logoSrc = theme === "light" ? "/prodlink-logo-light.svg" : "/prodlink-logo-v2.svg";
 
   // Keep client badge counts aligned when the server layout re-renders (navigation, etc.).
   useEffect(() => {
@@ -132,7 +159,7 @@ export function SiteHeader({
           <div className="flex items-center justify-between gap-3">
             <Link href={brandHref} className="inline-flex shrink-0" aria-label="prodLink home">
               <Image
-                src="/prodlink-logo-v2.svg"
+                src={logoSrc}
                 alt="prodLink"
                 width={210}
                 height={55}
@@ -236,11 +263,11 @@ export function SiteHeader({
         </div>
       </header>
 
-      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-screen md:w-[228px] md:flex-col md:justify-between md:px-4 md:py-5">
+      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-screen md:w-[268px] md:flex-col md:justify-between md:px-4 md:py-5">
         <div className="flex w-full flex-col gap-5">
           <Link href={brandHref} className="inline-flex shrink-0 self-start" aria-label="prodLink home">
             <Image
-              src="/prodlink-logo-v2.svg"
+              src={logoSrc}
               alt="prodLink"
               width={210}
               height={55}
@@ -251,18 +278,24 @@ export function SiteHeader({
           <nav className="flex w-full flex-col gap-1.5">
             {links.map(({ href, label }) => {
               const badge = badgeForHref(href);
+              const Icon = navLinkIcon[href];
               return (
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-transparent px-3 py-2.5 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
+                  className="flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2.5 text-base font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
                 >
-                  <span>{label}</span>
+                  {Icon ? (
+                    <Icon className="h-5 w-5 shrink-0 text-zinc-500" aria-hidden />
+                  ) : (
+                    <span className="h-5 w-5 shrink-0" aria-hidden />
+                  )}
+                  <span className="min-w-0 flex-1 leading-snug">{label}</span>
                   {badge ? (
-                    <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-amber-500 px-1.5 py-0.5 text-[10px] font-semibold text-zinc-950">
+                    <span className="inline-flex min-w-[1.25rem] shrink-0 items-center justify-center rounded-full bg-amber-500 px-1.5 py-0.5 text-[10px] font-semibold text-zinc-950">
                       {badge}
                     </span>
-                  ) : <span className="h-5 w-5" aria-hidden />}
+                  ) : null}
                 </Link>
               );
             })}
