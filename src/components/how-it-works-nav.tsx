@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useThemeSetting } from "@/components/theme-provider";
 import {
   HiOutlineArrowPath,
   HiOutlineBookOpen,
@@ -27,6 +28,8 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 
 export function HowItWorksNav() {
   const pathname = usePathname();
+  const { theme } = useThemeSetting();
+  const isLight = theme === "light";
 
   return (
     <nav
@@ -45,7 +48,9 @@ export function HowItWorksNav() {
                 href={href}
                 className={`flex items-center gap-2.5 rounded-2xl border px-3 py-2.5 text-sm font-medium transition lg:w-full lg:py-2.5 lg:text-base ${
                   active
-                    ? "border-amber-500/35 bg-amber-500/10 text-amber-200"
+                    ? isLight
+                      ? "border-amber-500/60 bg-amber-500/18 text-zinc-900"
+                      : "border-amber-500/35 bg-amber-500/10 text-amber-200"
                     : "border-transparent text-zinc-400 hover:border-white/10 hover:bg-white/5 hover:text-zinc-100"
                 }`}
               >

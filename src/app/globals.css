@@ -171,16 +171,16 @@ body {
     background-color: rgb(245 158 11 / 0.08);
   }
   :root:not(.dark) .bg-amber-500\/10 {
-    background-color: rgb(245 158 11 / 0.12);
-  }
-  :root:not(.dark) .bg-amber-500\/15 {
     background-color: rgb(245 158 11 / 0.16);
   }
+  :root:not(.dark) .bg-amber-500\/15 {
+    background-color: rgb(245 158 11 / 0.22);
+  }
   :root:not(.dark) .bg-amber-500\/20 {
-    background-color: rgb(245 158 11 / 0.2);
+    background-color: rgb(245 158 11 / 0.24);
   }
   :root:not(.dark) .bg-amber-500\/25 {
-    background-color: rgb(245 158 11 / 0.22);
+    background-color: rgb(245 158 11 / 0.28);
   }
   :root:not(.dark) .bg-emerald-500\/5 {
     background-color: rgb(16 185 129 / 0.08);
@@ -209,6 +209,18 @@ body {
   :root:not(.dark) .text-emerald-200 {
     color: rgb(6 95 70);
   }
+  :root:not(.dark) .text-emerald-300\/80 {
+    color: rgb(5 150 105 / 0.9);
+  }
+  :root:not(.dark) .text-emerald-300\/90 {
+    color: rgb(5 150 105 / 0.95);
+  }
+  :root:not(.dark) .text-emerald-400\/80 {
+    color: rgb(5 150 105 / 0.88);
+  }
+  :root:not(.dark) .text-emerald-400\/85 {
+    color: rgb(5 150 105 / 0.93);
+  }
   :root:not(.dark) .text-emerald-400\/90 {
     color: rgb(5 150 105 / 0.95);
   }
@@ -217,6 +229,9 @@ body {
   }
   :root:not(.dark) .text-amber-100 {
     color: rgb(120 53 15);
+  }
+  :root:not(.dark) .text-amber-200 {
+    color: rgb(146 64 14);
   }
   :root:not(.dark) .text-amber-200\/95 {
     color: rgb(146 64 14 / 0.98);
@@ -231,6 +246,9 @@ body {
     color: rgb(180 83 9);
   }
   :root:not(.dark) .text-amber-400\/90 {
+    color: rgb(180 83 9 / 0.95);
+  }
+  :root:not(.dark) .text-amber-400\/95 {
     color: rgb(180 83 9 / 0.95);
   }
   :root:not(.dark) .text-amber-200\/90 {
