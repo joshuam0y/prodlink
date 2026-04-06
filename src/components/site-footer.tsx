@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProdlinkSocialStrip } from "@/components/prodlink-social-strip";
 
 const linkClass =
   "text-xs text-zinc-500 transition hover:text-zinc-300 sm:text-sm";
@@ -6,7 +7,8 @@ const linkClass =
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-white/10 bg-[var(--background)]">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-4 py-10 sm:flex-row sm:justify-between sm:px-6">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-4 py-10 sm:px-6">
+        <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
         <p className="text-center text-xs text-zinc-600 sm:text-left">
           <span className="text-base font-semibold text-zinc-500 sm:text-lg">
             prodLink
@@ -28,6 +30,8 @@ export function SiteFooter() {
             Sign in
           </Link>
         </nav>
+        </div>
+        <ProdlinkSocialStrip compact />
       </div>
     </footer>
   );

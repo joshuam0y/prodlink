@@ -203,7 +203,7 @@ export default async function MatchesPage({
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">Messages</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Chats with your mutual matches. The fastest wins usually come from replying while the match is still fresh.
+          Chats with your mutual matches.
         </p>
       </div>
       <section className="mb-6 grid gap-3 sm:grid-cols-3">
@@ -226,7 +226,7 @@ export default async function MatchesPage({
             New matches
           </p>
           <p className="mt-2 text-2xl font-semibold text-zinc-50">{newMatchCount}</p>
-          <p className="mt-1 text-xs text-zinc-500">Fresh mutual likes waiting on a first message.</p>
+          <p className="mt-1 text-xs text-zinc-500">Mutual likes with no messages yet.</p>
         </div>
       </section>
       {yourTurnCount > 0 ? (
@@ -238,24 +238,9 @@ export default async function MatchesPage({
       ) : newMatchCount > 0 ? (
         <p className="mb-5 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
           {newMatchCount === 1
-            ? "You have a new match. Send the first message while the energy is fresh."
-            : `You have ${newMatchCount} new matches. Send the first message while the energy is fresh.`}
+            ? "You have a new match — say hi when you are ready."
+            : `You have ${newMatchCount} new matches — say hi when you are ready.`}
         </p>
-      ) : null}
-      {orderedMatchIds.length > 0 ? (
-        <div className="mb-5 flex flex-wrap gap-3">
-          <Link
-            href={`/matches/${orderedMatchIds[0]}`}
-            className="inline-flex rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400"
-          >
-            Open hottest thread
-          </Link>
-          {newMatchCount > 0 ? (
-            <p className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-zinc-400">
-              Prioritize new matches first, then conversations where they messaged last.
-            </p>
-          ) : null}
-        </div>
       ) : null}
       {notice ? (
         <p className="mb-5 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
@@ -327,13 +312,10 @@ export default async function MatchesPage({
                       <p className="mt-2 line-clamp-2 text-sm text-zinc-400">
                         {chat
                           ? formatPreview(chat.body, chat.mine)
-                          : "New match waiting. Start the conversation while it is fresh."}
+                          : "No messages yet — say hi when you are ready."}
                       </p>
                       {yourTurn ? (
                         <p className="mt-1.5 text-xs font-medium text-amber-400/95">Your turn</p>
-                      ) : null}
-                      {!isNewMatch && !yourTurn && unread === 0 ? (
-                        <p className="mt-1.5 text-xs text-zinc-600">Conversation warm</p>
                       ) : null}
                     </div>
                   </Link>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ProdlinkSocialStrip } from "@/components/prodlink-social-strip";
 
 export const metadata: Metadata = {
   title: "How it works",
@@ -17,8 +18,8 @@ const steps = [
     body: "Swipe through active profiles, tune distance when you need it (more granular miles and neighborhood-style filters are on the roadmap), and open full profiles when someone looks like a real fit—not another anonymous global feed.",
   },
   {
-    title: "Move while momentum is high",
-    body: "Save people you want to keep, message your matches quickly, and use notifications so conversations don&apos;t go cold.",
+    title: "Match and message",
+    body: "Save people you want to keep, message your matches, and use notifications so you don't miss a reply.",
   },
 ];
 
@@ -58,6 +59,9 @@ export default function HowItWorksPage() {
           >
             Build your profile
           </Link>
+        </div>
+        <div className="mt-8 border-t border-white/10 pt-6">
+          <ProdlinkSocialStrip />
         </div>
       </section>
 

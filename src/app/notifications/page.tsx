@@ -157,9 +157,7 @@ export default async function NotificationsPage() {
               ? "Someone is waiting on you in Messages."
               : `${unreadMessageAlerts} people are waiting on you in Messages.`}
           </p>
-          <p className="mt-1 text-sm text-amber-100/80">
-            Open Messages and reply while the thread is still warm.
-          </p>
+          <p className="mt-1 text-sm text-amber-100/80">Open Messages to catch up.</p>
           <div className="mt-3">
             <Link
               href="/matches"
@@ -173,12 +171,10 @@ export default async function NotificationsPage() {
         <div className="mb-6 rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-4">
           <p className="text-sm font-semibold text-emerald-100">
             {unreadMatchAlerts === 1
-              ? "You have a fresh match waiting."
-              : `You have ${unreadMatchAlerts} fresh matches waiting.`}
+              ? "You have a new match waiting."
+              : `You have ${unreadMatchAlerts} new matches waiting.`}
           </p>
-          <p className="mt-1 text-sm text-emerald-100/80">
-            Send the first message before the momentum drops.
-          </p>
+          <p className="mt-1 text-sm text-emerald-100/80">Open Messages when you want to say hi.</p>
           <div className="mt-3">
             <Link
               href="/matches"

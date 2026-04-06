@@ -153,8 +153,7 @@ export default async function ExplorePage({
             <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-700 dark:text-zinc-500">
               {viewerId ? (
                 <>
-                  Swipe through active prodLink profiles, open any card for the full profile, and keep
-                  the momentum going.
+                  Swipe through active prodLink profiles and open any card for the full profile.
                   {viewerRole === "venue" ? " Your feed stays focused on creatives." : null}
                 </>
               ) : (

@@ -129,7 +129,7 @@ export default async function LikesPage({
                       <p className="mt-1 text-xs text-emerald-100/80">
                         {p
                           ? `${roleLabel(p.role)}${p.city?.trim() ? ` · ${p.city.trim()}` : ""}`
-                          : "Say hi while the match is fresh."}
+                          : "Say hi when you are ready."}
                       </p>
                     </div>
                     <span className="shrink-0 text-sm font-medium text-emerald-200">Open chat →</span>
