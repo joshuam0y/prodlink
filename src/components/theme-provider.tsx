@@ -18,8 +18,10 @@ const ThemeContext = createContext<Ctx | null>(null);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeChoice>("dark");
 
+  // Hydrate from localStorage after mount (SSR default is dark).
   useEffect(() => {
     const parsed = parseThemeChoice(localStorage.getItem(THEME_STORAGE_KEY));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- apply stored theme after hydration
     setThemeState(parsed);
     localStorage.setItem(THEME_STORAGE_KEY, parsed);
   }, []);

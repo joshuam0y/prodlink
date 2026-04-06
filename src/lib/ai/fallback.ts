@@ -234,7 +234,7 @@ function calculateProfileScore(input: ProfileCoachInput): number {
   return Math.max(15, Math.min(88, score));
 }
 
-function pickPromptPair(role: string, niche: string, goal: string, lookingFor: string) {
+function pickPromptPair(role: string, niche: string, goal: string) {
   const promptOptions = getProfilePromptOptions(role);
 
   if (isVenueProfileRole(role)) {
@@ -267,7 +267,6 @@ export function buildFallbackProfileCoachSuggestion(
   const role = clean(input.role) || "creator";
   const niche = clean(input.niche);
   const goal = clean(input.goal);
-  const city = clean(input.city);
   const lookingFor = clean(input.lookingFor);
   const isVenue = isVenueProfileRole(role);
 
@@ -286,7 +285,7 @@ export function buildFallbackProfileCoachSuggestion(
     (isVenue
       ? "Say exactly which artists, teams, or event concepts fit your room and what helps them stand out."
       : `Say exactly who you want to meet, what kind of sessions you want, and what a good fit looks like.`);
-  const [fallbackPrompt1, fallbackPrompt2] = pickPromptPair(role.toLowerCase(), niche, goal, lookingFor);
+  const [fallbackPrompt1, fallbackPrompt2] = pickPromptPair(role.toLowerCase(), niche, goal);
   const nextPrompt1Question = clean(input.prompt1Question) || fallbackPrompt1.question;
   const nextPrompt2Question = clean(input.prompt2Question) || fallbackPrompt2.question;
   const nextPrompt1Answer =

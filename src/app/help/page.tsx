@@ -5,7 +5,7 @@ import { getSupportEmail } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Help center",
   description:
-    "prodLink help: beta, roadmap (audio clips, verification, Stripe Connect, labels), safety, pricing philosophy, support.",
+    "prodLink help: beta, roadmap (card audio, verification, labels, dual roles, discover, bundles), safety, pricing, support.",
 };
 
 export default function HelpPage() {
@@ -50,17 +50,62 @@ export default function HelpPage() {
             <dt className="font-medium text-zinc-200">Can I buy or sell beats in the app?</dt>
             <dd className="mt-1.5">
               <strong className="font-medium text-zinc-300">In-app checkout is not live yet.</strong>{" "}
-              We plan sales for beats and bundles using{" "}
-              <strong className="font-medium text-zinc-300">Stripe Connect</strong> and/or{" "}
-              <strong className="font-medium text-zinc-300">Plaid</strong>-style flows so
-              money can move inside prodLink with clearer records. Until then, anything you
-              arrange off-platform is between you and the other party.
+              We plan <strong className="font-medium text-zinc-300">in-app sales for beats and bundles</strong>{" "}
+              so buyers and sellers can transact with clearer records inside prodLink. Until
+              that ships, anything you arrange off-platform is between you and the other party.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-zinc-200">What&apos;s on the roadmap?</dt>
+            <dd className="mt-1.5 space-y-3">
+              <p>
+                Roadmap items we&apos;re working toward (timelines vary; not all are live in
+                beta):
+              </p>
+              <ul className="list-inside list-disc space-y-2 pl-0.5 text-zinc-400">
+                <li>
+                  <strong className="font-medium text-zinc-300">Short audio on cards</strong> — playable
+                  previews on profile cards (often around{" "}
+                  <strong className="font-medium text-zinc-300">15 seconds</strong>) so people hear
+                  your work in flow.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">Verification</strong> — government ID,{" "}
+                  face verification, and <strong className="font-medium text-zinc-300">linked SoundCloud</strong>{" "}
+                  (or similar) to reduce bots and impersonation.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">Label pitching</strong> — a record label
+                  role so artists can pitch tracks in-app, genre-agnostic.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">Dual roles</strong> — e.g. producer and DJ
+                  from one account.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">Discover &amp; proximity</strong> — tighter
+                  distance controls (miles, neighborhoods) and more ways to sort than only
+                  &quot;new&quot; and &quot;trending&quot;.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">In-app commerce</strong> — checkout for
+                  beats and bundles inside prodLink when we&apos;re ready to ship it.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">Fair pricing</strong> — paid plans tied to
+                  real features; we want to avoid a steep monthly gate.
+                </li>
+                <li>
+                  <strong className="font-medium text-zinc-300">Beta supporters</strong> — early users get{" "}
+                  <strong className="font-medium text-zinc-300">beta perks</strong> as major features land.
+                </li>
+              </ul>
             </dd>
           </div>
           <div>
             <dt className="font-medium text-zinc-200">Will there be short audio clips on cards?</dt>
             <dd className="mt-1.5">
-              <strong className="font-medium text-zinc-300">On the roadmap.</strong> We want
+              <strong className="font-medium text-zinc-300">Yes—that&apos;s planned.</strong> We want
               playable previews on profile cards—often around{" "}
               <strong className="font-medium text-zinc-300">15 seconds</strong>—so people
               hear your work in flow (similar in spirit to voice prompts on dating apps).
@@ -113,8 +158,8 @@ export default function HelpPage() {
             <dt className="font-medium text-zinc-200">How should I stay safe?</dt>
             <dd className="mt-1.5">
               Be cautious of scams and fake profiles—never assume someone is who they claim
-              without checking. We&apos;re working toward stronger verification and safer
-              in-app transactions; until then, use the same judgment you would anywhere
+              without checking. We&apos;re working toward stronger verification and clearer
+              in-app tools over time; until then, use the same judgment you would anywhere
               online.
             </dd>
           </div>

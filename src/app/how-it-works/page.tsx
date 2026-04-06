@@ -124,10 +124,8 @@ export default function HowItWorksPage() {
           </p>
           <p>
             <strong className="font-medium text-zinc-300">In-app beat and bundle sales</strong>{" "}
-            are planned via <strong className="font-medium text-zinc-300">Stripe Connect</strong>
-            {" "}and/or <strong className="font-medium text-zinc-300">Plaid</strong>-style
-            flows so checkout stays credible and in-app. We&apos;ll share updates as they
-            ship.
+            are planned so checkout can stay credible inside prodLink. We&apos;ll share
+            updates as they ship.
           </p>
           <p>
             On <strong className="font-medium text-zinc-300">pricing</strong>, we&apos;re

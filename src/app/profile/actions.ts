@@ -362,6 +362,8 @@ export type UpdateProfileBasicsPayload = {
   prompt_1_answer?: string;
   prompt_2_question?: string;
   prompt_2_answer?: string;
+  secondary_role?: string | null;
+  soundcloud_url?: string | null;
 };
 
 export async function updateProfileBasics(
@@ -387,6 +389,24 @@ export async function updateProfileBasics(
   if (typeof payload.prompt_1_answer === "string") patch.prompt_1_answer = payload.prompt_1_answer.trim();
   if (typeof payload.prompt_2_question === "string") patch.prompt_2_question = payload.prompt_2_question.trim();
   if (typeof payload.prompt_2_answer === "string") patch.prompt_2_answer = payload.prompt_2_answer.trim();
+  if ("secondary_role" in payload) {
+    const s = typeof payload.secondary_role === "string" ? payload.secondary_role.trim() : "";
+    patch.secondary_role = s || null;
+  }
+  if ("soundcloud_url" in payload) {
+    const raw = typeof payload.soundcloud_url === "string" ? payload.soundcloud_url.trim() : "";
+    if (raw) {
+      try {
+        const u = new URL(raw);
+        if (u.protocol !== "https:" || !u.hostname.includes("soundcloud.com")) {
+          return { ok: false, error: "SoundCloud URL must be an https://soundcloud.com link." };
+        }
+      } catch {
+        return { ok: false, error: "SoundCloud URL is not valid." };
+      }
+    }
+    patch.soundcloud_url = raw || null;
+  }
   if (Object.keys(patch).length === 0) return { ok: true };
 
   const promptFields = [

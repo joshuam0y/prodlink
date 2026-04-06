@@ -3,6 +3,7 @@
 import { completeOnboarding } from "@/app/auth/actions";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { getProfilePromptOptions } from "@/lib/profile-prompts";
+import { isLabelRoleEnabled } from "@/lib/roadmap-features";
 
 function isVenueRole(role?: string) {
   const s = (role ?? "").toLowerCase();
@@ -25,6 +26,9 @@ function roleHint(role?: string) {
   }
   if (isVenueRole(role)) {
     return "The best venue profiles make the room feel real: crowd, capacity, sound, professionalism, and what makes an artist a good fit.";
+  }
+  if (value.includes("label")) {
+    return "Strong label profiles spell out A&R taste, roster goals, and how you want demos pitched.";
   }
   return "Specific profiles get better matches and easier first messages.";
 }
@@ -57,13 +61,16 @@ function stepExample(stepId: string, role?: string) {
 
 function stepsForRole(role?: string) {
   const venue = isVenueRole(role);
+  const roleOptions = isLabelRoleEnabled()
+    ? ["Producer", "Artist / vocalist", "DJ", "Engineer", "Record label", "Venue / promoter"]
+    : ["Producer", "Artist / vocalist", "DJ", "Engineer", "Venue / promoter"];
 
   return [
     {
       id: "role",
       title: "What do you do?",
       subtitle: "We’ll tune discovery and copy to your side of the table.",
-      options: ["Producer", "Artist / vocalist", "DJ", "Engineer", "Venue / promoter"],
+      options: roleOptions,
     },
     {
       id: "niche",

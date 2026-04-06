@@ -48,7 +48,9 @@ export function SiteHeader({
     unreadNotifications,
   });
 
+  // Keep client badge counts aligned when the server layout re-renders (navigation, etc.).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync polled UI with fresh SSR props
     setCounts({ unreadMessages, unreadNotifications });
   }, [unreadMessages, unreadNotifications]);
 

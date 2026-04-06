@@ -341,7 +341,7 @@ export function ProfileBasicsForm({ initial }: Props) {
             {aiMeta.improvements.length > 0 ? (
               <div className="mt-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-amber-300/80">
-                  What's unclear
+                  What&apos;s unclear
                 </p>
                 <ul className="mt-2 space-y-1 text-sm text-zinc-300">
                   {aiMeta.improvements.map((item) => (

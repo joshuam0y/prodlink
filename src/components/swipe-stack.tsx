@@ -14,18 +14,11 @@ import { buildDefaultDraftOpener } from "@/lib/match-openers";
 import type { BeatPreview, ProfileCard } from "@/lib/types";
 import { isUuid } from "@/lib/uuid";
 import { profileInitials } from "@/lib/match-ui";
+import { getCardAudioPreviewMaxSeconds, isCardAudioPreviewCapEnabled } from "@/lib/roadmap-features";
 
 type Props = {
   profiles: ProfileCard[];
   viewerId?: string | null;
-};
-
-const roleLabel: Record<ProfileCard["role"], string> = {
-  producer: "Producer",
-  artist: "Artist",
-  dj: "DJ",
-  engineer: "Engineer",
-  venue: "Venue",
 };
 
 const THRESHOLD_PX = 56;
@@ -204,6 +197,23 @@ export function SwipeStack({ profiles, viewerId }: Props) {
       });
     };
     if (gestureStarted.current) tryPlay();
+
+    let removeCap: (() => void) | undefined;
+    if (isCardAudioPreviewCapEnabled()) {
+      const maxSec = getCardAudioPreviewMaxSeconds();
+      const onTime = () => {
+        if (a.currentTime >= maxSec) {
+          a.pause();
+          a.currentTime = maxSec;
+        }
+      };
+      a.addEventListener("timeupdate", onTime);
+      removeCap = () => a.removeEventListener("timeupdate", onTime);
+    }
+
+    return () => {
+      removeCap?.();
+    };
   }, [current?.id, current?.starBeat, current?.role]);
 
   const playBeat = useCallback((beat: BeatPreview) => {
@@ -731,7 +741,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
                     {current.displayName}
                   </h2>
                   <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-300 sm:text-base">
-                    {roleLabel[current.role]} · {current.city}
+                    {current.roleDisplay} · {current.city}
                     {typeof current.distanceKm === "number" ? ` · ${Math.round(current.distanceKm)} km away` : ""}
                   </p>
                   <div className="mt-1 flex flex-wrap gap-1.5">
@@ -1092,7 +1102,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
           <div className="min-w-0 flex-1">
             <p className="text-[10px] uppercase tracking-wider text-zinc-600 dark:text-zinc-500">Up next</p>
             <p className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-300">
-              {nextProfile.displayName} · {roleLabel[nextProfile.role]}
+              {nextProfile.displayName} · {nextProfile.roleDisplay}
             </p>
           </div>
         </div>

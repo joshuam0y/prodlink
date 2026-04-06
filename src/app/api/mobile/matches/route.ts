@@ -2,12 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import type { MobileApiResponse, MobileMatchPreview } from "@/lib/mobile-api/types";
-import type { Role } from "@/lib/types";
-
-function normalizeRole(role: Role | string | null | undefined): Role | string | null {
-  if (!role) return null;
-  return role;
-}
+import { formatRoleLine } from "@/lib/role-label";
 
 export async function GET(req: Request) {
   void req;
@@ -69,13 +64,14 @@ export async function GET(req: Request) {
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, display_name, role, city, neighborhood, niche")
+    .select("id, display_name, role, secondary_role, city, neighborhood, niche")
     .in("id", matchIds);
 
   type MiniProfile = {
     id: string;
     display_name: string | null;
     role: string | null;
+    secondary_role: string | null;
     city: string | null;
     neighborhood: string | null;
     niche: string | null;
@@ -121,7 +117,7 @@ export async function GET(req: Request) {
     return {
       id,
       name: profile?.display_name?.trim() || "Member",
-      role: normalizeRole(profile?.role ?? null) as string | null,
+      role: profile ? formatRoleLine(profile.role, profile.secondary_role) : null,
       city: profile?.neighborhood?.trim() || profile?.city?.trim() || null,
       niche: profile?.niche?.trim() || null,
       isNewMatch,

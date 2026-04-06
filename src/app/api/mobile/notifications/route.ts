@@ -9,7 +9,7 @@ import type {
   MobileNotificationsPayload,
 } from "@/lib/mobile-api/types";
 
-export async function GET(_req: Request) {
+export async function GET() {
   if (!isSupabaseConfigured()) {
     return NextResponse.json(
       { ok: false, error: "supabase_not_configured" } satisfies MobileApiError,
@@ -58,7 +58,7 @@ export async function GET(_req: Request) {
   } satisfies MobileApiResponse<MobileNotificationsPayload>);
 }
 
-export async function POST(_req: Request) {
+export async function POST() {
   if (!isSupabaseConfigured()) {
     return NextResponse.json(
       { ok: false, error: "supabase_not_configured" } satisfies MobileApiError,

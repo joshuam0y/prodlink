@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import type { MobileApiError, MobileApiResponse, MobileUnreadCounts } from "@/lib/mobile-api/types";
 
-export async function GET(_req: Request) {
+export async function GET() {
   if (!isSupabaseConfigured()) {
     return NextResponse.json(
       { ok: false, error: "supabase_not_configured" } satisfies MobileApiError,

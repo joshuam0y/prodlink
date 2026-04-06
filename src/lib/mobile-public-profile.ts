@@ -1,6 +1,7 @@
 import { beatsFromProfileRow } from "@/lib/profile-beats";
 import { inferProfileRole } from "@/lib/discover-profiles";
 import { isPublicFieldVisible } from "@/lib/public-visibility";
+import { formatRoleLine } from "@/lib/role-label";
 import { parseSocialLinks } from "@/lib/social-links";
 import type { MobilePublicProfile } from "@/lib/mobile-api/types";
 import type { DbProfile } from "@/lib/types";
@@ -9,6 +10,9 @@ import type { DbProfile } from "@/lib/types";
 export function mapDbProfileToMobilePublic(profile: DbProfile): MobilePublicProfile {
   const vis = profile.public_visibility;
   const role = inferProfileRole(profile.role ?? null);
+  const secondaryRaw = profile.secondary_role?.trim();
+  const inferredSecondary = secondaryRaw ? inferProfileRole(secondaryRaw) : null;
+  const secondaryRole = inferredSecondary && inferredSecondary !== role ? inferredSecondary : null;
   const { starBeat, extraBeats } = beatsFromProfileRow({
     id: profile.id,
     star_beat_title: profile.star_beat_title ?? null,
@@ -28,6 +32,8 @@ export function mapDbProfileToMobilePublic(profile: DbProfile): MobilePublicProf
     id: profile.id,
     displayName: profile.display_name?.trim() || "Member",
     role,
+    roleDisplay: formatRoleLine(profile.role, profile.secondary_role),
+    secondaryRole,
     city: showLocation ? profile.city?.trim() || null : null,
     neighborhood: showLocation ? profile.neighborhood?.trim() || null : null,
     niche: showNiche ? profile.niche?.trim() || null : null,
@@ -41,5 +47,6 @@ export function mapDbProfileToMobilePublic(profile: DbProfile): MobilePublicProf
     starBeat: showBeats ? starBeat : undefined,
     extraBeats: showBeats ? extraBeats : undefined,
     socialLinks: parseSocialLinks(profile.social_links),
+    soundcloudUrl: profile.soundcloud_url?.trim() || null,
   };
 }

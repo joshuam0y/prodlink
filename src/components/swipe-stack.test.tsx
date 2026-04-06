@@ -49,6 +49,7 @@ function mkProfile(overrides: Partial<ProfileCard>): ProfileCard {
     id: "11111111-1111-1111-1111-111111111111",
     displayName: "Profile A",
     role: "artist",
+    roleDisplay: "Artist",
     city: "NYC",
     niche: "Indie",
     bio: "Bio",

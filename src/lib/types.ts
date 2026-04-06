@@ -1,4 +1,4 @@
-export type Role = "producer" | "artist" | "dj" | "engineer" | "venue";
+export type Role = "producer" | "artist" | "dj" | "engineer" | "venue" | "label";
 
 /** Short audio preview for discover cards (URLs must allow streaming). */
 export type BeatPreview = {
@@ -17,6 +17,8 @@ export type ProfileCard = {
   aiTags?: string[];
   aiScore?: number | null;
   role: Role;
+  /** Header line for cards, e.g. "Producer · DJ" when dual roles exist. */
+  roleDisplay: string;
   city: string;
   niche: string;
   bio: string;
@@ -95,4 +97,8 @@ export type DbProfile = {
   public_visibility?: unknown;
   /** JSON array of `{ label, url }` — max 6, HTTPS URLs. */
   social_links?: unknown;
+  /** Second role when dual-role roadmap is enabled. */
+  secondary_role?: string | null;
+  /** HTTPS SoundCloud profile URL (roadmap / verification). */
+  soundcloud_url?: string | null;
 };

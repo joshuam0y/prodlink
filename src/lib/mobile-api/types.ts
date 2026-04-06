@@ -90,6 +90,10 @@ export type MobilePublicProfile = {
   id: string;
   displayName: string;
   role: Role;
+  /** Same pattern as discover/public: e.g. "Producer · DJ" when both roles differ. */
+  roleDisplay: string;
+  /** Set when a second role exists and differs from `role`. */
+  secondaryRole: Role | null;
   city: string | null;
   neighborhood: string | null;
   niche: string | null;
@@ -103,6 +107,8 @@ export type MobilePublicProfile = {
   starBeat?: BeatPreview;
   extraBeats?: BeatPreview[];
   socialLinks: MobileSocialLink[];
+  /** HTTPS SoundCloud profile URL when set. */
+  soundcloudUrl: string | null;
 };
 
 export type MobileUpdateBasicsInput = {
@@ -115,6 +121,8 @@ export type MobileUpdateBasicsInput = {
   prompt_1_answer?: string;
   prompt_2_question?: string;
   prompt_2_answer?: string;
+  secondary_role?: string | null;
+  soundcloud_url?: string | null;
 };
 
 export type MobileUpdateLocationInput = {

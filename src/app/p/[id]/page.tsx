@@ -7,7 +7,7 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { discoverAccentGradientForRole, inferProfileRole } from "@/lib/discover-profiles";
 import { beatsFromProfileRow } from "@/lib/profile-beats";
 import { isVenueProfileRole } from "@/lib/profile-prompts";
-import { roleLabel as profileRoleLabel } from "@/lib/role-label";
+import { formatRoleLine } from "@/lib/role-label";
 import { isUuid } from "@/lib/uuid";
 import type { DbProfile } from "@/lib/types";
 import { formatDisplayDate } from "@/lib/format-date";
@@ -101,7 +101,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
   const { data: row, error } = await supabase
     .from("profiles")
     .select(
-      "id, created_at, last_seen_at, updated_at, display_name, avatar_url, gallery_image_urls, ai_summary, ai_tags, ai_profile_score, role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
+      "id, created_at, last_seen_at, updated_at, display_name, avatar_url, gallery_image_urls, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, soundcloud_url, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
     )
     .eq("id", id)
     .maybeSingle();
@@ -169,7 +169,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
     }
   }
   const metaLine = [
-    profileRoleLabel(profile.role),
+    formatRoleLine(profile.role, profile.secondary_role ?? null),
     showLocation ? discoverCityLabel : null,
     showLocation && distanceKm !== undefined ? `${Math.round(distanceKm)} km away` : null,
   ]
@@ -304,8 +304,20 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
         {discoverBioLine ? (
           <p className="mt-2 max-w-2xl text-base leading-relaxed text-zinc-200">{discoverBioLine}</p>
         ) : null}
-        {socialLinks.length > 0 ? (
+        {socialLinks.length > 0 || profile.soundcloud_url?.trim() ? (
           <ul className="mt-4 flex flex-wrap gap-2">
+            {profile.soundcloud_url?.trim() ? (
+              <li key="soundcloud">
+                <a
+                  href={profile.soundcloud_url.trim()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-amber-300/95 transition hover:border-amber-500/35 hover:bg-amber-500/10"
+                >
+                  SoundCloud
+                </a>
+              </li>
+            ) : null}
             {socialLinks.map((s) => (
               <li key={s.url}>
                 <a

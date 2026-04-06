@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { beatsFromProfileRow } from "@/lib/profile-beats";
 import type { ProfileCard, Role } from "@/lib/types";
+import { formatRoleLine } from "@/lib/role-label";
 
 /** Map onboarding / DB `profiles.role` text to a discover `Role`. */
 export function inferProfileRole(raw: string | null): Role {
@@ -10,6 +11,7 @@ export function inferProfileRole(raw: string | null): Role {
   if (s.includes("dj")) return "dj";
   if (s.includes("engineer")) return "engineer";
   if (s.includes("venue") || s.includes("promoter")) return "venue";
+  if (s.includes("label")) return "label";
   if (s.includes("artist")) return "artist";
   return "artist";
 }
@@ -22,6 +24,7 @@ export function discoverAccentGradientForRole(r: Role): string {
     dj: "from-amber-500 via-orange-500 to-amber-700",
     engineer: "from-zinc-300 via-zinc-100 to-amber-500",
     venue: "from-slate-600 to-zinc-700",
+    label: "from-violet-500 via-fuchsia-600 to-amber-500",
   };
   return m[r];
 }
@@ -66,7 +69,7 @@ export async function getLiveProfileCards(
   let q = supabase
     .from("profiles")
     .select(
-      "id, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, updated_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats",
+      "id, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, updated_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats",
     )
     .not("onboarding_completed_at", "is", null)
     .order("updated_at", { ascending: false })
@@ -158,7 +161,15 @@ export async function getLiveProfileCards(
     );
     const aiTags = parseAiTags(row.ai_tags);
     const candidateTokens = new Set(
-      tokenize(row.role, row.niche, row.goal, row.looking_for, row.ai_summary ?? null, ...aiTags),
+      tokenize(
+        row.role,
+        (row as { secondary_role?: string | null }).secondary_role ?? null,
+        row.niche,
+        row.goal,
+        row.looking_for,
+        row.ai_summary ?? null,
+        ...aiTags,
+      ),
     );
     let overlap = 0;
     for (const token of candidateTokens) {
@@ -214,7 +225,15 @@ export async function getLiveProfileCards(
       Math.min(1, Number(embeddingSimilarity.get(row.id) ?? 0)),
     );
     const candidateTokens = new Set(
-      tokenize(row.role, row.niche, row.goal, row.looking_for, row.ai_summary ?? null, ...aiTags),
+      tokenize(
+        row.role,
+        (row as { secondary_role?: string | null }).secondary_role ?? null,
+        row.niche,
+        row.goal,
+        row.looking_for,
+        row.ai_summary ?? null,
+        ...aiTags,
+      ),
     );
     let overlap = 0;
     for (const token of candidateTokens) {
@@ -337,6 +356,8 @@ export async function getLiveProfileCards(
       star_beat_cover_url: row.star_beat_cover_url ?? null,
       extra_beats: row.extra_beats,
     });
+    const secondaryRole = (row as { secondary_role?: string | null }).secondary_role ?? null;
+    const roleDisplay = formatRoleLine(row.role, secondaryRole);
     return {
       id: row.id,
       displayName: name,
@@ -345,6 +366,7 @@ export async function getLiveProfileCards(
       aiTags: aiTags,
       aiScore: Number.isFinite(Number(row.ai_profile_score)) ? Number(row.ai_profile_score) : null,
       role,
+      roleDisplay,
       city: row.neighborhood?.trim() || row.city?.trim() || "—",
       niche: focus,
       bio: niche,
