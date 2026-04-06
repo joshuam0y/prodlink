@@ -5,7 +5,7 @@ import { getSupportEmail } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Help center",
   description:
-    "prodLink help: beta, roadmap (card audio, verification, labels, dual roles, discover, bundles), safety, pricing, support.",
+    "prodLink help: beta, discover (distance, sorts), optional dual roles and SoundCloud, card audio previews, safety, pricing, support.",
 };
 
 export default function HelpPage() {
@@ -59,33 +59,46 @@ export default function HelpPage() {
             <dt className="font-medium text-zinc-200">What&apos;s on the roadmap?</dt>
             <dd className="mt-1.5 space-y-3">
               <p>
-                Roadmap items we&apos;re working toward (timelines vary; not all are live in
-                beta):
+                We ship in layers. Some items below are{" "}
+                <strong className="font-medium text-zinc-300">already in the app</strong> (your
+                build may turn them on gradually); others are{" "}
+                <strong className="font-medium text-zinc-300">still coming</strong>.
               </p>
               <ul className="list-inside list-disc space-y-2 pl-0.5 text-zinc-400">
                 <li>
-                  <strong className="font-medium text-zinc-300">Short audio on cards</strong> — playable
-                  previews on profile cards (often around{" "}
-                  <strong className="font-medium text-zinc-300">15 seconds</strong>) so people hear
-                  your work in flow.
+                  <strong className="font-medium text-zinc-300">Short audio on discover cards</strong> —{" "}
+                  <strong className="font-medium text-zinc-300">In the app:</strong> playable
+                  previews with a short cap (often around{" "}
+                  <strong className="font-medium text-zinc-300">15 seconds</strong>) when enabled.
                 </li>
                 <li>
-                  <strong className="font-medium text-zinc-300">Verification</strong> — government ID,{" "}
-                  face verification, and <strong className="font-medium text-zinc-300">linked SoundCloud</strong>{" "}
-                  (or similar) to reduce bots and impersonation.
+                  <strong className="font-medium text-zinc-300">Trust &amp; verification</strong> —{" "}
+                  <strong className="font-medium text-zinc-300">In the app:</strong> optional{" "}
+                  <strong className="font-medium text-zinc-300">SoundCloud</strong> link on your profile
+                  when that section is enabled. <strong className="font-medium text-zinc-300">Not yet:</strong>{" "}
+                  government ID or automated face checks.
                 </li>
                 <li>
-                  <strong className="font-medium text-zinc-300">Label pitching</strong> — a record label
-                  role so artists can pitch tracks in-app, genre-agnostic.
+                  <strong className="font-medium text-zinc-300">Labels &amp; pitching</strong> —{" "}
+                  <strong className="font-medium text-zinc-300">In the app:</strong> you can choose a{" "}
+                  <strong className="font-medium text-zinc-300">record label</strong> role in onboarding
+                  when enabled. <strong className="font-medium text-zinc-300">Not yet:</strong> dedicated
+                  in-app pitching workflows—those are still planned.
                 </li>
                 <li>
-                  <strong className="font-medium text-zinc-300">Dual roles</strong> — e.g. producer and DJ
-                  from one account.
+                  <strong className="font-medium text-zinc-300">Dual roles</strong> —{" "}
+                  <strong className="font-medium text-zinc-300">In the app:</strong> an optional second
+                  role (e.g. producer and DJ) so discover and profiles can show a combined line like{" "}
+                  <strong className="font-medium text-zinc-300">Producer · DJ</strong> when enabled.
                 </li>
                 <li>
-                  <strong className="font-medium text-zinc-300">Discover &amp; proximity</strong> — tighter
-                  distance controls (miles, neighborhoods) and more ways to sort than only
-                  &quot;new&quot; and &quot;trending&quot;.
+                  <strong className="font-medium text-zinc-300">Discover &amp; proximity</strong> —{" "}
+                  <strong className="font-medium text-zinc-300">In beta today:</strong> distance filter
+                  and sorts including <strong className="font-medium text-zinc-300">nearby</strong>,{" "}
+                  <strong className="font-medium text-zinc-300">trending</strong>, and{" "}
+                  <strong className="font-medium text-zinc-300">new</strong>.{" "}
+                  <strong className="font-medium text-zinc-300">Still coming:</strong> more
+                  neighborhood-focused options and refinements.
                 </li>
                 <li>
                   <strong className="font-medium text-zinc-300">In-app commerce</strong> — checkout for
@@ -96,8 +109,9 @@ export default function HelpPage() {
                   real features; we want to avoid a steep monthly gate.
                 </li>
                 <li>
-                  <strong className="font-medium text-zinc-300">Beta supporters</strong> — early users get{" "}
-                  <strong className="font-medium text-zinc-300">beta perks</strong> as major features land.
+                  <strong className="font-medium text-zinc-300">Beta supporters</strong> — early users may
+                  see <strong className="font-medium text-zinc-300">beta perks</strong> messaging as major
+                  features land.
                 </li>
               </ul>
             </dd>
@@ -105,45 +119,48 @@ export default function HelpPage() {
           <div>
             <dt className="font-medium text-zinc-200">Will there be short audio clips on cards?</dt>
             <dd className="mt-1.5">
-              <strong className="font-medium text-zinc-300">Yes—that&apos;s planned.</strong> We want
-              playable previews on profile cards—often around{" "}
-              <strong className="font-medium text-zinc-300">15 seconds</strong>—so people
-              hear your work in flow (similar in spirit to voice prompts on dating apps).
+              <strong className="font-medium text-zinc-300">Yes—this is in the product.</strong> Discover
+              cards can play short previews (often around{" "}
+              <strong className="font-medium text-zinc-300">15 seconds</strong>) when that behavior is
+              enabled for your app, so people hear your work in flow.
             </dd>
           </div>
           <div>
             <dt className="font-medium text-zinc-200">What about verification?</dt>
             <dd className="mt-1.5">
-              Planned: <strong className="font-medium text-zinc-300">government ID</strong>,{" "}
-              <strong className="font-medium text-zinc-300">face verification</strong>, and{" "}
-              <strong className="font-medium text-zinc-300">linked SoundCloud</strong> (or
-              similar) to reduce bots, impersonation, and casual music theft. Not live yet.
+              You can add an optional <strong className="font-medium text-zinc-300">SoundCloud</strong>{" "}
+              link on your profile when that option is available—useful context, not a full identity
+              check. <strong className="font-medium text-zinc-300">Government ID</strong> and{" "}
+              <strong className="font-medium text-zinc-300">face verification</strong> are not live yet;
+              we&apos;re working toward stronger trust tools over time.
             </dd>
           </div>
           <div>
             <dt className="font-medium text-zinc-200">Will labels and pitching be in prodLink?</dt>
             <dd className="mt-1.5">
-              We&apos;re planning a <strong className="font-medium text-zinc-300">record label</strong>{" "}
-              role so artists can pitch tracks in-app—{" "}
-              <strong className="font-medium text-zinc-300">genre-agnostic</strong>, not
-              limited to a single scene. Timing TBD.
+              A <strong className="font-medium text-zinc-300">record label</strong> role is available in
+              onboarding when enabled. Dedicated{" "}
+              <strong className="font-medium text-zinc-300">in-app pitching</strong> to labels—{" "}
+              <strong className="font-medium text-zinc-300">genre-agnostic</strong>—is still planned;
+              timing TBD.
             </dd>
           </div>
           <div>
             <dt className="font-medium text-zinc-200">Can one person be both a producer and a DJ?</dt>
             <dd className="mt-1.5">
-              <strong className="font-medium text-zinc-300">Dual roles are on the roadmap</strong>{" "}
-              so you can wear more than one hat from a single account when the product
-              supports it.
+              <strong className="font-medium text-zinc-300">Yes when dual roles are enabled:</strong> you
+              can set a primary role and an optional second role so discover and public profiles can show
+              both (e.g. <strong className="font-medium text-zinc-300">Producer · DJ</strong>).
             </dd>
           </div>
           <div>
-            <dt className="font-medium text-zinc-200">How will discover handle distance?</dt>
+            <dt className="font-medium text-zinc-200">How does discover handle distance?</dt>
             <dd className="mt-1.5">
-              You can filter by distance today in beta; we&apos;re building toward{" "}
-              <strong className="font-medium text-zinc-300">tighter proximity</strong>—miles,
-              neighborhoods, and sorts beyond only &quot;new&quot; and &quot;trending&quot;—so
-              local gigs and collabs are easier to find.
+              In beta you can <strong className="font-medium text-zinc-300">filter by distance</strong>{" "}
+              and use sorts like <strong className="font-medium text-zinc-300">nearby</strong>,{" "}
+              <strong className="font-medium text-zinc-300">trending</strong>, and{" "}
+              <strong className="font-medium text-zinc-300">new</strong>. We&apos;re still improving
+              tighter neighborhood-style discovery on top of that.
             </dd>
           </div>
           <div>
@@ -158,9 +175,9 @@ export default function HelpPage() {
             <dt className="font-medium text-zinc-200">How should I stay safe?</dt>
             <dd className="mt-1.5">
               Be cautious of scams and fake profiles—never assume someone is who they claim
-              without checking. We&apos;re working toward stronger verification and clearer
-              in-app tools over time; until then, use the same judgment you would anywhere
-              online.
+              without checking.               We&apos;re working toward stronger verification and clearer in-app tools over
+              time (optional profile links like SoundCloud are a start, not proof of ID); until
+              then, use the same judgment you would anywhere online.
             </dd>
           </div>
         </dl>
