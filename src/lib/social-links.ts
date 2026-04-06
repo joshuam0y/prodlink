@@ -33,6 +33,7 @@ export function validateSocialLinksForSave(links: SocialLink[]): { ok: true } | 
     return { ok: false, error: `Add at most ${MAX_LINKS} links.` };
   }
   const seen = new Set<string>();
+  const seenLabels = new Set<string>();
   for (let i = 0; i < links.length; i++) {
     const { label, url } = links[i];
     const t = label.trim();
@@ -54,6 +55,11 @@ export function validateSocialLinksForSave(links: SocialLink[]): { ok: true } | 
       return { ok: false, error: "Each URL must be unique." };
     }
     seen.add(key);
+    const lk = t.toLowerCase();
+    if (seenLabels.has(lk)) {
+      return { ok: false, error: "Each platform or label can only be used once." };
+    }
+    seenLabels.add(lk);
   }
   return { ok: true };
 }

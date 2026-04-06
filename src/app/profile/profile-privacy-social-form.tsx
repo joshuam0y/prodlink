@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { SocialPlatformSelect } from "@/components/social-platform-select";
 import type { PublicVisibilityKey } from "@/lib/public-visibility";
 import { isPublicFieldVisible } from "@/lib/public-visibility";
+import type { KnownSocialPlatformId } from "@/lib/social-platforms-data";
+import { matchLabelToPlatformId, platformIdToLabel } from "@/lib/social-platforms-data";
 import type { SocialLink } from "@/lib/social-links";
 import { updateProfilePrivacySocial } from "./actions";
 
@@ -11,8 +14,16 @@ type Props = {
   initialLinks: SocialLink[];
 };
 
+type LinkRow = {
+  platformId: KnownSocialPlatformId | null;
+  customLabel: string;
+  url: string;
+};
+
 const fieldClass =
   "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+
+const selectButtonClass = `${fieldClass} flex items-center justify-between gap-2`;
 
 const toggles: { key: PublicVisibilityKey; label: string; hint: string }[] = [
   {
@@ -44,6 +55,40 @@ function initialVisible(key: PublicVisibilityKey, raw: unknown): boolean {
   return isPublicFieldVisible(key, raw);
 }
 
+function linksToRows(links: SocialLink[]): LinkRow[] {
+  if (!links.length) return [{ platformId: null, customLabel: "", url: "" }];
+  return links.map((l) => {
+    const id = matchLabelToPlatformId(l.label);
+    if (id === "custom") {
+      return { platformId: "custom", customLabel: l.label, url: l.url };
+    }
+    return { platformId: id, customLabel: "", url: l.url };
+  });
+}
+
+function rowsToSocialLinks(rows: LinkRow[]): SocialLink[] {
+  const out: SocialLink[] = [];
+  for (const r of rows) {
+    if (!r.platformId) continue;
+    const label = platformIdToLabel(r.platformId, r.customLabel).trim();
+    const url = r.url.trim();
+    if (!label || !url) continue;
+    out.push({ label, url });
+  }
+  return out;
+}
+
+function disabledPlatformIdsForRow(rows: LinkRow[], index: number): Set<string> {
+  const s = new Set<string>();
+  rows.forEach((row, i) => {
+    if (i === index) return;
+    if (row.platformId && row.platformId !== "custom") {
+      s.add(row.platformId);
+    }
+  });
+  return s;
+}
+
 export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Props) {
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
@@ -54,12 +99,10 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
     }
     return o;
   });
-  const [links, setLinks] = useState<SocialLink[]>(
-    initialLinks.length ? initialLinks : [{ label: "", url: "" }],
-  );
+  const [rows, setRows] = useState<LinkRow[]>(() => linksToRows(initialLinks));
 
-  function setLink(index: number, patch: Partial<SocialLink>) {
-    setLinks((prev) => {
+  function setRow(index: number, patch: Partial<LinkRow>) {
+    setRows((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], ...patch };
       return next;
@@ -67,19 +110,19 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
   }
 
   function addLink() {
-    if (links.length >= 6) return;
-    setLinks((prev) => [...prev, { label: "", url: "" }]);
+    if (rows.length >= 6) return;
+    setRows((prev) => [...prev, { platformId: null, customLabel: "", url: "" }]);
   }
 
   function removeLink(index: number) {
-    setLinks((prev) => (prev.length <= 1 ? [{ label: "", url: "" }] : prev.filter((_, i) => i !== index)));
+    setRows((prev) =>
+      prev.length <= 1 ? [{ platformId: null, customLabel: "", url: "" }] : prev.filter((_, i) => i !== index),
+    );
   }
 
   function save() {
     setMessage(null);
-    const cleaned: SocialLink[] = links
-      .map((l) => ({ label: l.label.trim(), url: l.url.trim() }))
-      .filter((l) => l.label.length > 0 || l.url.length > 0);
+    const cleaned = rowsToSocialLinks(rows);
     startTransition(async () => {
       const res = await updateProfilePrivacySocial({
         visibility: vis,
@@ -122,50 +165,67 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
       <div className="mt-8">
         <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">Social &amp; web links</h3>
         <p className="mt-1 text-sm text-zinc-500">
-          Up to six links (Instagram, SoundCloud, Linktree, etc.). URLs must use{" "}
-          <code className="text-zinc-400">https://</code>.
+          Pick a platform, then paste your <code className="text-zinc-400">https://</code> link. Each platform
+          can only appear once. For anything else, choose{" "}
+          <strong className="font-medium text-zinc-400">Custom label…</strong> and type a short name.
         </p>
         <ul className="mt-4 space-y-4">
-          {links.map((link, index) => (
-            <li key={index} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-              <div>
-                <label className="text-xs text-zinc-500" htmlFor={`social-label-${index}`}>
-                  Label
-                </label>
-                <input
-                  id={`social-label-${index}`}
-                  className={fieldClass}
-                  value={link.label}
-                  onChange={(e) => setLink(index, { label: e.target.value })}
-                  placeholder="Instagram"
-                  autoComplete="off"
-                />
+          {rows.map((row, index) => (
+            <li key={index} className="space-y-3">
+              <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] sm:items-start">
+                <div className="min-w-0">
+                  <span className="text-xs text-zinc-500">Platform</span>
+                  <div className="mt-1.5">
+                    <SocialPlatformSelect
+                      value={row.platformId}
+                      onChange={(id) => setRow(index, { platformId: id, customLabel: id === "custom" ? row.customLabel : "" })}
+                      disabledPlatformIds={disabledPlatformIdsForRow(rows, index)}
+                      buttonClassName={selectButtonClass}
+                    />
+                  </div>
+                </div>
+                <div className="min-w-0">
+                  <label className="text-xs text-zinc-500" htmlFor={`social-url-${index}`}>
+                    URL
+                  </label>
+                  <input
+                    id={`social-url-${index}`}
+                    className={fieldClass}
+                    value={row.url}
+                    onChange={(e) => setRow(index, { url: e.target.value })}
+                    placeholder="https://…"
+                    inputMode="url"
+                    autoComplete="url"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="rounded-xl border border-white/10 px-3 py-2.5 text-sm text-zinc-400 transition hover:bg-white/5 hover:text-zinc-200 sm:mt-6"
+                  onClick={() => removeLink(index)}
+                >
+                  Remove
+                </button>
               </div>
-              <div>
-                <label className="text-xs text-zinc-500" htmlFor={`social-url-${index}`}>
-                  URL
-                </label>
-                <input
-                  id={`social-url-${index}`}
-                  className={fieldClass}
-                  value={link.url}
-                  onChange={(e) => setLink(index, { url: e.target.value })}
-                  placeholder="https://…"
-                  inputMode="url"
-                  autoComplete="url"
-                />
-              </div>
-              <button
-                type="button"
-                className="rounded-xl border border-white/10 px-3 py-2.5 text-sm text-zinc-400 transition hover:bg-white/5 hover:text-zinc-200"
-                onClick={() => removeLink(index)}
-              >
-                Remove
-              </button>
+              {row.platformId === "custom" ? (
+                <div>
+                  <label className="text-xs text-zinc-500" htmlFor={`social-custom-${index}`}>
+                    Custom label
+                  </label>
+                  <input
+                    id={`social-custom-${index}`}
+                    className={fieldClass}
+                    value={row.customLabel}
+                    onChange={(e) => setRow(index, { customLabel: e.target.value })}
+                    placeholder="e.g. Link-in-bio, Press kit"
+                    maxLength={48}
+                    autoComplete="off"
+                  />
+                </div>
+              ) : null}
             </li>
           ))}
         </ul>
-        {links.length < 6 ? (
+        {rows.length < 6 ? (
           <button
             type="button"
             className="mt-3 text-sm font-medium text-amber-400/90 hover:text-amber-300"
