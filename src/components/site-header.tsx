@@ -26,6 +26,7 @@ import type { MobileApiResponse, MobileUnreadCounts } from "@/lib/mobile-api/typ
 
 const allNavLinks = [
   { href: "/explore", label: "Discover" },
+  { href: "/points", label: "Points", authOnly: true },
   { href: "/likes", label: "Likes", authOnly: true },
   { href: "/matches", label: "Messages", authOnly: true },
   { href: "/notifications", label: "Notifications", authOnly: true },
@@ -37,6 +38,7 @@ const allNavLinks = [
 
 const navLinkIcon: Partial<Record<string, IconType>> = {
   "/explore": HiOutlineMagnifyingGlass,
+  "/points": HiOutlineCube,
   "/likes": HiOutlineHeart,
   "/matches": HiOutlineChatBubbleLeftRight,
   "/notifications": HiOutlineBell,
@@ -55,6 +57,7 @@ type Props = {
   unreadMessages?: number;
   unreadNotifications?: number;
   pointsBalance?: number;
+  outreachCreditsBalance?: number;
   /** When false, hide the Profile → onboarding link (user finished questionnaire). */
   showBuildProfileNav?: boolean;
 };
@@ -67,6 +70,7 @@ export function SiteHeader({
   unreadMessages = 0,
   unreadNotifications = 0,
   pointsBalance = 0,
+  outreachCreditsBalance = 0,
   showBuildProfileNav = true,
 }: Props) {
   const { theme } = useThemeSetting();
@@ -306,12 +310,16 @@ export function SiteHeader({
 
         <div className="flex w-full flex-col gap-2 border-t border-white/10 pt-4">
           {user ? (
-            <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-3 py-2.5">
+            <Link
+              href="/points"
+              className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-3 py-2.5 transition hover:bg-amber-500/15"
+            >
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-400/90">
                 Points
               </p>
               <p className="mt-1 text-lg font-semibold text-zinc-100">{pointsBalance}</p>
-            </div>
+              <p className="mt-1 text-xs text-zinc-400">Outreach credits: {outreachCreditsBalance}</p>
+            </Link>
           ) : null}
           <ThemeToggle />
           <ShareAppButton

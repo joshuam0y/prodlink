@@ -125,7 +125,7 @@ export default async function MatchesPage({
   const newMatchCount = orderedMatchIds.filter((id) => !byMatchMessage.has(id)).length;
   const yourTurnCount = orderedMatchIds.filter((id) => {
     const chat = byMatchMessage.get(id);
-    return Boolean(chat && !chat.mine && (chat.unreadIncoming ?? 0) > 0);
+    return Boolean(chat && !chat.mine);
   }).length;
   const unreadThreadCount = orderedMatchIds.filter((id) => {
     const chat = byMatchMessage.get(id);
@@ -211,21 +211,21 @@ export default async function MatchesPage({
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
             Needs reply
           </p>
-          <p className="mt-2 text-2xl font-semibold text-zinc-50">{yourTurnCount}</p>
+          <p className="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{yourTurnCount}</p>
           <p className="mt-1 text-xs text-zinc-500">Conversations where they spoke last.</p>
         </div>
         <div className="rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/40">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
             Unread
           </p>
-          <p className="mt-2 text-2xl font-semibold text-zinc-50">{unreadThreadCount}</p>
+          <p className="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{unreadThreadCount}</p>
           <p className="mt-1 text-xs text-zinc-500">Matches with unread incoming messages.</p>
         </div>
         <div className="rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/40">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
             New matches
           </p>
-          <p className="mt-2 text-2xl font-semibold text-zinc-50">{newMatchCount}</p>
+          <p className="mt-2 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{newMatchCount}</p>
           <p className="mt-1 text-xs text-zinc-500">Mutual likes with no messages yet.</p>
         </div>
       </section>
@@ -270,7 +270,7 @@ export default async function MatchesPage({
                 <div className="p-4">
                   <Link
                     href={`/matches/${id}`}
-                    className="flex gap-3 rounded-xl transition hover:bg-zinc-100/80 dark:hover:bg-white/[0.04]"
+                    className="flex gap-3 rounded-xl transition hover:bg-zinc-100/90 dark:hover:bg-white/[0.04]"
                   >
                     <ProfileAvatar
                       name={name}
@@ -282,7 +282,7 @@ export default async function MatchesPage({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <span className="font-semibold text-zinc-50">{name}</span>
+                          <span className="font-semibold text-zinc-900 dark:text-zinc-50">{name}</span>
                           {meta ? (
                             <p className="mt-0.5 truncate text-xs text-zinc-600 dark:text-zinc-500">{meta}</p>
                           ) : null}
@@ -309,13 +309,13 @@ export default async function MatchesPage({
                           ) : null}
                         </div>
                       </div>
-                      <p className="mt-2 line-clamp-2 text-sm text-zinc-400">
+                      <p className="mt-2 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
                         {chat
                           ? formatPreview(chat.body, chat.mine)
                           : "No messages yet — say hi when you are ready."}
                       </p>
                       {yourTurn ? (
-                        <p className="mt-1.5 text-xs font-medium text-amber-400/95">Your turn</p>
+                        <p className="mt-1.5 text-xs font-medium text-amber-700 dark:text-amber-400/95">Your turn</p>
                       ) : null}
                     </div>
                   </Link>
@@ -346,7 +346,7 @@ export default async function MatchesPage({
                   >
                     <button
                       type="submit"
-                      className="text-xs font-medium text-zinc-600 transition hover:text-red-700 dark:text-zinc-500 dark:hover:text-red-300/90"
+                      className="rounded-full border border-zinc-300/80 bg-white px-3 py-1 text-xs font-medium text-zinc-700 transition hover:border-red-500/45 hover:bg-red-500/10 hover:text-red-700 active:scale-[0.98] dark:border-white/12 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:border-red-500/35 dark:hover:bg-red-500/10 dark:hover:text-red-200"
                     >
                       Unmatch
                     </button>

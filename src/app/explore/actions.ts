@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { trackServerEvent } from "@/lib/analytics";
 import { createNotification } from "@/lib/notifications";
-import { awardPoints, POINT_VALUES } from "@/lib/points";
+import { awardPoints, POINT_VALUES, spendPoints } from "@/lib/points";
 import { isUuid } from "@/lib/uuid";
 
 export type DiscoverAction = "pass" | "save";
@@ -96,6 +96,30 @@ async function maybeNotifyForSave(
   return true;
 }
 
+async function reverseMatchPoints(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  aUserId: string,
+  bUserId: string,
+) {
+  const pair = [aUserId, bUserId].sort().join(":");
+  await spendPoints(
+    supabase,
+    aUserId,
+    "match_reversed",
+    POINT_VALUES.matchCreated,
+    `match_reversed:${pair}:${aUserId}`,
+    { peerId: bUserId },
+  );
+  await spendPoints(
+    supabase,
+    bUserId,
+    "match_reversed",
+    POINT_VALUES.matchCreated,
+    `match_reversed:${pair}:${bUserId}`,
+    { peerId: aUserId },
+  );
+}
+
 export async function recordDiscoverAction(
   targetId: string,
   action: DiscoverAction,
@@ -115,6 +139,24 @@ export async function recordDiscoverAction(
   if (user.id === targetId) {
     return { ok: false };
   }
+
+  const { data: beforeRow } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", user.id)
+    .eq("target_id", targetId)
+    .maybeSingle();
+  const beforeAction = beforeRow?.action as string | undefined;
+  const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
+
+  const { data: reciprocalBefore } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", targetId)
+    .eq("target_id", user.id)
+    .in("action", ["save", "interested"])
+    .maybeSingle();
+  const wasMatchedBefore = hadLikeBefore && Boolean(reciprocalBefore);
 
   const { error } = await supabase.from("discover_swipes").upsert(
     {
@@ -136,7 +178,7 @@ export async function recordDiscoverAction(
     metadata: { targetId },
   });
 
-  if (action === "save") {
+  if (action === "save" && !hadLikeBefore) {
     await awardPoints(
       supabase,
       user.id,
@@ -145,6 +187,20 @@ export async function recordDiscoverAction(
       `like_sent:${user.id}:${targetId}`,
       { targetId },
     );
+  }
+
+  if (action !== "save" && hadLikeBefore) {
+    await spendPoints(
+      supabase,
+      user.id,
+      "like_reversed",
+      POINT_VALUES.likeSent,
+      `like_reversed:${user.id}:${targetId}`,
+      { targetId },
+    );
+    if (wasMatchedBefore) {
+      await reverseMatchPoints(supabase, user.id, targetId);
+    }
   }
 
   if (action !== "save") return { ok: true };
@@ -175,6 +231,23 @@ export async function setDiscoverAction(
     return { ok: false };
   }
 
+  const { data: beforeRow } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", user.id)
+    .eq("target_id", targetId)
+    .maybeSingle();
+  const beforeAction = beforeRow?.action as string | undefined;
+  const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
+  const { data: reciprocalBefore } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", targetId)
+    .eq("target_id", user.id)
+    .in("action", ["save", "interested"])
+    .maybeSingle();
+  const wasMatchedBefore = hadLikeBefore && Boolean(reciprocalBefore);
+
   const { error } = await supabase.from("discover_swipes").upsert(
     {
       viewer_id: user.id,
@@ -195,11 +268,33 @@ export async function setDiscoverAction(
     metadata: { targetId },
   });
 
-  if (action === "save") {
+  if (action === "save" && !hadLikeBefore) {
+    await awardPoints(
+      supabase,
+      user.id,
+      "like_sent",
+      POINT_VALUES.likeSent,
+      `like_sent:${user.id}:${targetId}`,
+      { targetId },
+    );
     try {
       await maybeNotifyForSave(supabase, user.id, targetId);
     } catch {
       // Best-effort only.
+    }
+  }
+
+  if (action !== "save" && hadLikeBefore) {
+    await spendPoints(
+      supabase,
+      user.id,
+      "like_reversed",
+      POINT_VALUES.likeSent,
+      `like_reversed:${user.id}:${targetId}`,
+      { targetId },
+    );
+    if (wasMatchedBefore) {
+      await reverseMatchPoints(supabase, user.id, targetId);
     }
   }
 
@@ -243,6 +338,23 @@ export async function removeDiscoverAction(
     return { ok: false };
   }
 
+  const { data: beforeRow } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", user.id)
+    .eq("target_id", targetId)
+    .maybeSingle();
+  const beforeAction = beforeRow?.action as string | undefined;
+  const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
+  const { data: reciprocalBefore } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", targetId)
+    .eq("target_id", user.id)
+    .in("action", ["save", "interested"])
+    .maybeSingle();
+  const wasMatchedBefore = hadLikeBefore && Boolean(reciprocalBefore);
+
   const { error } = await supabase
     .from("discover_swipes")
     .delete()
@@ -259,6 +371,20 @@ export async function removeDiscoverAction(
     path: pathToRevalidate,
     metadata: { targetId },
   });
+
+  if (hadLikeBefore) {
+    await spendPoints(
+      supabase,
+      user.id,
+      "like_reversed",
+      POINT_VALUES.likeSent,
+      `like_reversed:${user.id}:${targetId}`,
+      { targetId },
+    );
+  }
+  if (wasMatchedBefore) {
+    await reverseMatchPoints(supabase, user.id, targetId);
+  }
 
   const { error: pipelineErr } = await supabase
     .from("interested_pipeline")

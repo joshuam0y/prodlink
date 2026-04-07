@@ -48,3 +48,24 @@ export async function getPointsBalance(
     .maybeSingle();
   return Number(data?.balance ?? 0);
 }
+
+export async function spendPoints(
+  supabase: SupabaseClient,
+  userId: string,
+  eventName: string,
+  points: number,
+  eventKey: string,
+  metadata: Record<string, JsonValue> = {},
+): Promise<boolean> {
+  if (!userId || points <= 0 || !eventKey) return false;
+  const { data, error } = await supabase.rpc("spend_points", {
+    p_user_id: userId,
+    p_event_name: eventName,
+    p_points: points,
+    p_event_key: eventKey,
+    p_metadata: metadata,
+  });
+  if (error) return false;
+  const row = Array.isArray(data) ? data[0] : data;
+  return Boolean(row?.applied);
+}
