@@ -101,7 +101,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
   const { data: row, error } = await supabase
     .from("profiles")
     .select(
-      "id, created_at, last_seen_at, updated_at, display_name, avatar_url, gallery_image_urls, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, soundcloud_url, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
+      "id, created_at, last_seen_at, updated_at, display_name, avatar_url, gallery_image_urls, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, soundcloud_url, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links, verification_status, id_verified_at, linked_account_verified_at",
     )
     .eq("id", id)
     .maybeSingle();
@@ -122,6 +122,12 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
   const showNichePublic = isOwn || isPublicFieldVisible("niche", visibility);
   const showBeats = isOwn || isPublicFieldVisible("beats", visibility);
   const socialLinks = parseSocialLinks(profile.social_links);
+  const verificationBadges: string[] = [];
+  if (profile.id_verified_at) verificationBadges.push("ID verified");
+  if (profile.linked_account_verified_at) verificationBadges.push("Linked account");
+  if (profile.verification_status === "verified" && verificationBadges.length === 0) {
+    verificationBadges.push("Verified profile");
+  }
   const { starBeat, extraBeats } = beatsFromProfileRow({
     id: profile.id,
     star_beat_title: profile.star_beat_title ?? null,
@@ -301,6 +307,18 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
           ) : null}
         </div>
         <p className="text-sm text-zinc-300 sm:text-base">{metaLine}</p>
+        {verificationBadges.length > 0 ? (
+          <div className="mt-2 flex flex-wrap gap-2">
+            {verificationBadges.map((badge) => (
+              <span
+                key={badge}
+                className="inline-flex rounded-full border border-sky-500/35 bg-sky-500/10 px-3 py-1 text-[11px] font-medium text-sky-100"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+        ) : null}
         {discoverBioLine ? (
           <p className="mt-2 max-w-2xl text-base leading-relaxed text-zinc-200">{discoverBioLine}</p>
         ) : null}

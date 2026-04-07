@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { generateMatchOpeners } from "@/lib/ai/client";
 import { buildFallbackMatchOpeners } from "@/lib/ai/fallback";
 import { createClient } from "@/lib/supabase/server";
+import { createNotification } from "@/lib/notifications";
+import { buildRoleAwareOpeners } from "@/lib/match-openers";
 import { isAiProfileCoachConfigured, isSupabaseConfigured } from "@/lib/env";
 import { isUuid } from "@/lib/uuid";
 
@@ -116,14 +118,85 @@ export async function generateMatchOpenersAction(
   };
 
   try {
-    const openers = isAiProfileCoachConfigured()
+    const aiOrFallback = isAiProfileCoachConfigured()
       ? await generateMatchOpeners(input)
       : buildFallbackMatchOpeners(input);
-    return { ok: true, openers };
+    const roleAware = buildRoleAwareOpeners({
+      themName: input.themName,
+      themRole: input.themRole,
+      themNiche: input.themNiche,
+      themGoal: input.themGoal,
+      themLookingFor: input.themLookingFor,
+    });
+    const merged = [...aiOrFallback, ...roleAware]
+      .map((v) => v.trim())
+      .filter(Boolean)
+      .filter((v, i, arr) => arr.findIndex((x) => x.toLowerCase() === v.toLowerCase()) === i)
+      .slice(0, 5);
+    return { ok: true, openers: merged };
   } catch (error) {
     return {
       ok: false,
       error: error instanceof Error ? error.message : "Could not generate openers.",
     };
   }
+}
+
+export async function createFollowUpReminderAction(
+  targetId: string,
+  hoursFromNow = 24,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!isSupabaseConfigured() || !isUuid(targetId)) {
+    return { ok: false, error: "invalid_target" };
+  }
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "not_signed_in" };
+  if (user.id === targetId) return { ok: false, error: "self" };
+
+  const { data: mySwipe } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", user.id)
+    .eq("target_id", targetId)
+    .in("action", ["save", "interested"])
+    .maybeSingle();
+  const { data: theirSwipe } = await supabase
+    .from("discover_swipes")
+    .select("action")
+    .eq("viewer_id", targetId)
+    .eq("target_id", user.id)
+    .in("action", ["save", "interested"])
+    .maybeSingle();
+  if (!mySwipe || !theirSwipe) return { ok: false, error: "not_matched" };
+
+  const reminderAt = new Date(Date.now() + Math.max(1, Math.min(168, hoursFromNow)) * 60 * 60 * 1000);
+  const reminderIso = reminderAt.toISOString();
+  const { error } = await supabase.from("message_follow_up_reminders").insert({
+    user_id: user.id,
+    match_id: targetId,
+    remind_at: reminderIso,
+    note: "Manual follow-up reminder",
+  });
+  if (error) return { ok: false, error: "insert_failed" };
+
+  await createNotification({
+    userId: user.id,
+    actorId: targetId,
+    kind: "reply_nudge",
+    title: "Follow-up reminder set",
+    body: `We will remind you to check this chat in about ${Math.max(1, Math.min(168, hoursFromNow))} hours.`,
+    href: `/matches/${targetId}`,
+    metadata: {
+      reminderKey: `manual_follow_up:${targetId}:${reminderIso}`,
+      actorId: targetId,
+      remindAt: reminderIso,
+    },
+  });
+  revalidatePath(`/matches/${targetId}`);
+  revalidatePath("/matches");
+  revalidatePath("/notifications");
+  return { ok: true };
 }

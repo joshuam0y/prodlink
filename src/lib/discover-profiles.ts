@@ -69,7 +69,7 @@ export async function getLiveProfileCards(
   let q = supabase
     .from("profiles")
     .select(
-      "id, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, updated_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats",
+      "id, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, updated_at, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, verification_status, id_verified_at, linked_account_verified_at",
     )
     .not("onboarding_completed_at", "is", null)
     .order("updated_at", { ascending: false })
@@ -376,6 +376,12 @@ export async function getLiveProfileCards(
     });
     const secondaryRole = (row as { secondary_role?: string | null }).secondary_role ?? null;
     const roleDisplay = formatRoleLine(row.role, secondaryRole);
+    const verificationBadges: string[] = [];
+    if (row.id_verified_at) verificationBadges.push("ID verified");
+    if (row.linked_account_verified_at) verificationBadges.push("Linked account");
+    if (row.verification_status === "verified" && verificationBadges.length === 0) {
+      verificationBadges.push("Verified");
+    }
     return {
       id: row.id,
       displayName: name,
@@ -404,6 +410,7 @@ export async function getLiveProfileCards(
         ? Number(embeddingSimilarity.get(row.id))
         : undefined,
       distanceKm,
+      verificationBadges,
     };
     });
 }

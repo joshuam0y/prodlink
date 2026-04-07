@@ -755,6 +755,14 @@ export function SwipeStack({ profiles, viewerId }: Props) {
                         {current.rankReason}
                       </span>
                     ) : null}
+                    {current.verificationBadges?.slice(0, 2).map((badge) => (
+                      <span
+                        key={badge}
+                        className="inline-flex rounded-full border border-sky-600/35 bg-sky-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-sky-900 dark:border-sky-500/35 dark:bg-sky-900/30 dark:text-sky-100"
+                      >
+                        {badge}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>

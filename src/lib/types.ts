@@ -46,6 +46,7 @@ export type ProfileCard = {
   distanceKm?: number;
   /** They saved you on Discover; surfaced first in the stack. */
   likedYou?: boolean;
+  verificationBadges?: string[];
 };
 
 export type BeatBundle = {
@@ -101,4 +102,7 @@ export type DbProfile = {
   secondary_role?: string | null;
   /** HTTPS SoundCloud profile URL (roadmap / verification). */
   soundcloud_url?: string | null;
+  verification_status?: "unverified" | "partial" | "verified" | null;
+  id_verified_at?: string | null;
+  linked_account_verified_at?: string | null;
 };

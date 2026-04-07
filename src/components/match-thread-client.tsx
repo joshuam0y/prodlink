@@ -2,7 +2,7 @@
 
 import type { FormEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { generateMatchOpenersAction } from "@/app/matches/actions";
+import { createFollowUpReminderAction, generateMatchOpenersAction } from "@/app/matches/actions";
 import { useThemeSetting } from "@/components/theme-provider";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
@@ -77,6 +77,7 @@ export function MatchThreadClient({
   const [body, setBody] = useState(initialDraft ?? "");
   const [sending, setSending] = useState(false);
   const [loadingOpeners, setLoadingOpeners] = useState(false);
+  const [settingReminder, setSettingReminder] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [matchTyping, setMatchTyping] = useState(false);
   const [moderationNotice, setModerationNotice] = useState<string | null>(null);
@@ -317,7 +318,7 @@ export function MatchThreadClient({
     setLoadingOpeners(true);
     void generateMatchOpenersAction(matchId)
       .then((result) => {
-        if (cancelled || !result.ok || result.openers.length !== 3) return;
+        if (cancelled || !result.ok || result.openers.length === 0) return;
         setQuickOpeners(result.openers);
       })
       .catch(() => {})
@@ -579,6 +580,31 @@ export function MatchThreadClient({
         <p className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-100">
           {moderationNotice}
         </p>
+      ) : null}
+      {!blocked && messages.length > 0 ? (
+        <div className="mt-3 flex items-center justify-between rounded-xl border border-zinc-300/80 bg-white/90 px-3 py-2 dark:border-white/10 dark:bg-white/[0.03]">
+          <p className="text-xs text-zinc-600 dark:text-zinc-500">
+            Need to follow up later? Set a reminder.
+          </p>
+          <button
+            type="button"
+            disabled={settingReminder}
+            onClick={async () => {
+              setSettingReminder(true);
+              const result = await createFollowUpReminderAction(matchId, 24);
+              if (result.ok) {
+                setModerationNotice("Reminder set. We will nudge you to follow up in about 24 hours.");
+                setError(null);
+              } else {
+                setError("Could not set reminder right now.");
+              }
+              setSettingReminder(false);
+            }}
+            className="rounded-full border border-amber-500/35 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-900 transition hover:bg-amber-500/20 disabled:opacity-60 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200 dark:hover:bg-amber-500/15"
+          >
+            {settingReminder ? "Setting..." : "Remind me tomorrow"}
+          </button>
+        </div>
       ) : null}
       {!blocked && messages.length === 0 ? (
         <div className="mt-3 rounded-xl border border-zinc-300/80 bg-white/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
