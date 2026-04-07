@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isAiProfileCoachConfigured, isSupabaseConfigured } from "@/lib/env";
 import { getSiteOrigin } from "@/lib/site-url";
 import { trackServerEvent } from "@/lib/analytics";
+import { awardPoints, POINT_VALUES } from "@/lib/points";
 import { isProfileQuestionnaireComplete } from "@/lib/profile-completion";
 import { redirect } from "next/navigation";
 import {
@@ -389,6 +390,14 @@ export async function completeOnboarding(payload: OnboardingPayload) {
     path: "/onboarding",
     metadata: { role: payload.role },
   });
+  await awardPoints(
+    supabase,
+    user.id,
+    "onboarding_completed",
+    POINT_VALUES.onboardingComplete,
+    `onboarding_completed:${user.id}`,
+    { role: payload.role },
+  );
   await refreshAiAfterOnboarding(user.id, {
     ...payload,
     display_name: displayName,

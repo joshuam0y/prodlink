@@ -54,6 +54,7 @@ type Props = {
   supabaseEnabled: boolean;
   unreadMessages?: number;
   unreadNotifications?: number;
+  pointsBalance?: number;
   /** When false, hide the Profile → onboarding link (user finished questionnaire). */
   showBuildProfileNav?: boolean;
 };
@@ -65,6 +66,7 @@ export function SiteHeader({
   supabaseEnabled,
   unreadMessages = 0,
   unreadNotifications = 0,
+  pointsBalance = 0,
   showBuildProfileNav = true,
 }: Props) {
   const { theme } = useThemeSetting();
@@ -303,6 +305,14 @@ export function SiteHeader({
         </div>
 
         <div className="flex w-full flex-col gap-2 border-t border-white/10 pt-4">
+          {user ? (
+            <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-3 py-2.5">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-400/90">
+                Points
+              </p>
+              <p className="mt-1 text-lg font-semibold text-zinc-100">{pointsBalance}</p>
+            </div>
+          ) : null}
           <ThemeToggle />
           <ShareAppButton
             className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-left text-sm font-medium text-zinc-300 transition hover:border-white/15 hover:bg-white/7 hover:text-zinc-50"

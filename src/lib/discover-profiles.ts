@@ -160,6 +160,22 @@ export async function getLiveProfileCards(
       Math.min(1, Number(embeddingSimilarity.get(row.id) ?? 0)),
     );
     const aiTags = parseAiTags(row.ai_tags);
+    const nowMs = Date.now();
+    const updatedMs = row.updated_at ? new Date(row.updated_at).getTime() : 0;
+    const ageDays = updatedMs > 0 ? Math.max(0, (nowMs - updatedMs) / (1000 * 60 * 60 * 24)) : 30;
+    const recencyScore = Math.max(0, 1 - Math.min(1, ageDays / 14));
+    const completenessSignals = [
+      Boolean((row.looking_for ?? "").trim()),
+      Boolean((row.goal ?? "").trim()),
+      Boolean((row.niche ?? "").trim()),
+      Boolean((row.prompt_1_answer ?? "").trim()),
+      Boolean((row.prompt_2_answer ?? "").trim()),
+      Boolean((row.city ?? "").trim() || (row.neighborhood ?? "").trim()),
+      Boolean((row.ai_summary ?? "").trim()),
+      aiTags.length > 0,
+    ];
+    const completenessScore =
+      completenessSignals.filter(Boolean).length / completenessSignals.length;
     const candidateTokens = new Set(
       tokenize(
         row.role,
@@ -182,6 +198,8 @@ export async function getLiveProfileCards(
     if ((row.prompt_2_answer ?? "").trim()) score += 0.06;
     if ((row.ai_summary ?? "").trim()) score += 0.08;
     if (aiTags.length > 0) score += 0.06;
+    score += recencyScore * 0.16;
+    score += completenessScore * 0.2;
     score += aiScore * 0.3;
     score += semanticSimilarity * 0.45;
     score += overlapRatio * 0.35;

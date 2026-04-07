@@ -522,7 +522,9 @@ export function MatchThreadClient({
                         ? isLight
                           ? "rounded-br-md bg-amber-500 text-zinc-950 ring-1 ring-amber-600/40"
                           : "rounded-br-md bg-amber-500 text-zinc-950 ring-1 ring-amber-500/35"
-                        : "rounded-bl-md bg-white/[0.06] text-zinc-100 ring-1 ring-white/10"
+                        : isLight
+                          ? "rounded-bl-md bg-white text-zinc-900 ring-1 ring-zinc-300/80"
+                          : "rounded-bl-md bg-white/[0.06] text-zinc-100 ring-1 ring-white/10"
                     } ${m.pending ? "opacity-70" : ""}`}
                   >
                     {parsed.kind === "image" ? (
@@ -798,8 +800,8 @@ export function MatchThreadClient({
                   <button
                     type="button"
                     onClick={() => setConfirmAction(blockedByMe ? "unblock" : "block")}
-                    className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm hover:bg-white/5 ${
-                      blockedByMe ? "text-emerald-200" : "text-red-200"
+                    className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-white/5 ${
+                      blockedByMe ? "text-emerald-700 dark:text-emerald-200" : "text-red-700 dark:text-red-200"
                     }`}
                   >
                     <span>{blockedByMe ? "Unblock" : "Block"}</span>
@@ -815,11 +817,11 @@ export function MatchThreadClient({
       </div>
       <form
         ref={formRef}
-        className="mt-3 rounded-2xl border border-white/10 bg-zinc-900/45 p-2 shadow-inner shadow-black/15"
+        className="mt-3 rounded-2xl border border-zinc-300/80 bg-white/90 p-2 shadow-inner shadow-black/10 dark:border-white/10 dark:bg-zinc-900/45 dark:shadow-black/15"
         onSubmit={onSubmit}
       >
         {firstMessage ? (
-          <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-xs text-amber-100/90">
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/5 dark:text-amber-100/90">
             Best first messages are short, specific, and clearly tied to their sound, room, or goal.
           </div>
         ) : null}
@@ -854,12 +856,12 @@ export function MatchThreadClient({
           className="w-full resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-0"
           placeholder={`Message ${matchName}...`}
         />
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/5 px-2 pb-1 pt-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-zinc-200/90 px-2 pb-1 pt-2 dark:border-white/5">
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setEmojiOpen((value) => !value)}
-              className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:bg-white/5"
+              className="rounded-full border border-zinc-300/80 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
             >
               Emoji
             </button>
@@ -867,7 +869,7 @@ export function MatchThreadClient({
               type="button"
               onClick={() => imageInputRef.current?.click()}
               disabled={uploadingMedia || blocked}
-              className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:bg-white/5 disabled:opacity-50"
+              className="rounded-full border border-zinc-300/80 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
             >
               Photo
             </button>
@@ -905,7 +907,7 @@ export function MatchThreadClient({
               className={`rounded-full border px-3 py-1.5 text-xs font-medium transition disabled:opacity-50 ${
                 recording
                   ? "border-red-500/35 bg-red-500/10 text-red-200"
-                  : "border-white/10 text-zinc-300 hover:bg-white/5"
+                  : "border-zinc-300/80 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
               }`}
             >
               {recording ? "Stop recording" : "Voice"}

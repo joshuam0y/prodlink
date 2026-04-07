@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { trackServerEvent } from "@/lib/analytics";
 import { createNotification } from "@/lib/notifications";
+import { awardPoints, POINT_VALUES } from "@/lib/points";
 import { isUuid } from "@/lib/uuid";
 
 export type DiscoverAction = "pass" | "save";
@@ -74,6 +75,24 @@ async function maybeNotifyForSave(
     metadata: { actorId: targetId },
   });
 
+  const pair = [actorId, targetId].sort().join(":");
+  await awardPoints(
+    supabase,
+    actorId,
+    "match_created",
+    POINT_VALUES.matchCreated,
+    `match_created:${pair}`,
+    { peerId: targetId },
+  );
+  await awardPoints(
+    supabase,
+    targetId,
+    "match_created",
+    POINT_VALUES.matchCreated,
+    `match_created:${pair}`,
+    { peerId: actorId },
+  );
+
   return true;
 }
 
@@ -116,6 +135,17 @@ export async function recordDiscoverAction(
     path: "/explore",
     metadata: { targetId },
   });
+
+  if (action === "save") {
+    await awardPoints(
+      supabase,
+      user.id,
+      "like_sent",
+      POINT_VALUES.likeSent,
+      `like_sent:${user.id}:${targetId}`,
+      { targetId },
+    );
+  }
 
   if (action !== "save") return { ok: true };
 

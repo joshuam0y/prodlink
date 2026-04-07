@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isAiProfileCoachConfigured, isSupabaseConfigured } from "@/lib/env";
 import { trackServerEvent } from "@/lib/analytics";
 import { createNotification } from "@/lib/notifications";
+import { awardPoints, POINT_VALUES } from "@/lib/points";
 import { isUuid } from "@/lib/uuid";
 import type { MobileApiError, MobileApiResponse, MobileMessagesRow } from "@/lib/mobile-api/types";
 
@@ -165,6 +166,14 @@ export async function POST(req: Request, { params }: Ctx) {
     path: `/matches/${id}`,
     metadata: { recipientId: id },
   });
+  await awardPoints(
+    supabase,
+    user.id,
+    "message_sent",
+    POINT_VALUES.messageSent,
+    `message_sent:${data.id}`,
+    { recipientId: id },
+  );
 
   try {
     const { data: me } = await supabase

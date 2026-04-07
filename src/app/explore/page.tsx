@@ -12,21 +12,33 @@ import { isProfileQuestionnaireComplete } from "@/lib/profile-completion";
 import type { Role } from "@/lib/types";
 
 type DiscoverGroup = "creatives" | "venues";
+type GroupParam = DiscoverGroup | "";
 
-function isGroup(s: string | undefined): s is DiscoverGroup | "" {
+function isGroup(s: string | undefined): s is GroupParam {
   return s === "" || s === "creatives" || s === "venues";
 }
 
 export default async function ExplorePage({
   searchParams,
 }: {
-  searchParams: Promise<{ group?: string; notice?: string; maxKm?: string; sort?: string }>;
+  searchParams: Promise<{ group?: string; notice?: string; maxKm?: string; sort?: string; preset?: string }>;
 }) {
   const params = await searchParams;
-  const groupFilter = isGroup(params.group) ? params.group : "";
+  const preset = (params.preset ?? "").toLowerCase();
+  const presetDefaults:
+    | { group: GroupParam; sort: "nearby" | "new"; maxKm: number }
+    | null =
+    preset === "nearby_collabs"
+      ? { group: "creatives", sort: "nearby", maxKm: 25 }
+      : preset === "venues_only"
+        ? { group: "venues", sort: "nearby", maxKm: 30 }
+        : preset === "new_this_week"
+          ? { group: "", sort: "new", maxKm: 50 }
+          : null;
+  const groupFilter = isGroup(params.group) ? params.group : (presetDefaults?.group ?? "");
   const notice = params.notice ? decodeURIComponent(params.notice) : null;
-  const maxKm = Math.max(1, Math.min(200, Number(params.maxKm ?? 50) || 50));
-  const sortRaw = (params.sort ?? "").toLowerCase();
+  const maxKm = Math.max(1, Math.min(200, Number(params.maxKm ?? presetDefaults?.maxKm ?? 50) || 50));
+  const sortRaw = (params.sort ?? presetDefaults?.sort ?? "").toLowerCase();
   const sort =
     sortRaw === "nearby" || sortRaw === "new" || sortRaw === "trending"
       ? (sortRaw as "nearby" | "new" | "trending")
@@ -125,6 +137,13 @@ export default async function ExplorePage({
   const effectiveGroupFilter =
     viewerRole === "venue" && groupFilter === "" ? "creatives" : groupFilter;
   const activeSummary = [
+    presetDefaults
+      ? preset === "nearby_collabs"
+        ? "preset: nearby collaborators"
+        : preset === "venues_only"
+          ? "preset: venues only"
+          : "preset: new this week"
+      : null,
     effectiveGroupFilter === "creatives"
       ? "showing creatives"
       : effectiveGroupFilter === "venues"

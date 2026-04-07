@@ -5,6 +5,19 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Sort = "nearby" | "trending" | "new";
 type DiscoverGroup = "" | "creatives" | "venues";
+type Preset = "nearby_collabs" | "venues_only" | "new_this_week";
+
+const PRESETS: Array<{
+  id: Preset;
+  label: string;
+  group: DiscoverGroup;
+  sort: Sort;
+  km: number;
+}> = [
+  { id: "nearby_collabs", label: "Nearby collaborators", group: "creatives", sort: "nearby", km: 25 },
+  { id: "venues_only", label: "Venues only", group: "venues", sort: "nearby", km: 30 },
+  { id: "new_this_week", label: "New this week", group: "", sort: "new", km: 50 },
+];
 
 export function DiscoverFilterBar({
   initialGroup,
@@ -131,6 +144,36 @@ export function DiscoverFilterBar({
               className="mt-3 w-full accent-[var(--accent)]"
               aria-label="Distance radius"
             />
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-600 dark:text-zinc-500">
+            Presets
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {PRESETS.filter((preset) => allowVenueFilter || preset.id !== "venues_only").map((preset) => {
+              const active =
+                draftGroup === preset.group && draftSort === preset.sort && draftKm === preset.km;
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => {
+                    setDraftGroup(preset.group);
+                    setDraftSort(preset.sort);
+                    setDraftKm(preset.km);
+                  }}
+                  className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition sm:text-sm ${
+                    active
+                      ? "bg-amber-500/25 text-amber-950 ring-1 ring-amber-600/40 dark:bg-amber-500/20 dark:text-amber-300 dark:ring-amber-500/40"
+                      : "bg-zinc-200/80 text-zinc-700 ring-1 ring-zinc-300/80 hover:bg-zinc-300/80 hover:text-zinc-900 dark:bg-white/5 dark:text-zinc-400 dark:ring-white/10 dark:hover:bg-white/10 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 

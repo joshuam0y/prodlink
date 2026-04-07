@@ -234,7 +234,7 @@ export default async function LikesPage({
           </p>
         ) : (
           <>
-            <p className="mt-2 text-xs text-zinc-500">
+            <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-500">
               Unlike removes your like so they can show up in Discover again.
             </p>
             <ul className="mt-4 space-y-2">
@@ -243,7 +243,7 @@ export default async function LikesPage({
               const name = p?.display_name?.trim() || "Member";
               return (
                 <li key={id}>
-                  <div className="flex items-stretch gap-2 rounded-2xl border border-white/8 bg-white/[0.03] p-2 pl-3 transition hover:border-white/15 hover:bg-white/[0.05]">
+                  <div className="flex items-stretch gap-2 rounded-2xl border border-zinc-300/80 bg-white/90 p-2 pl-3 transition hover:border-zinc-400/80 hover:bg-zinc-100/80 dark:border-white/8 dark:bg-white/[0.03] dark:hover:border-white/15 dark:hover:bg-white/[0.05]">
                     <Link
                       href={`/p/${id}`}
                       className="flex min-w-0 flex-1 items-center gap-3 py-1 pr-1"
@@ -252,16 +252,16 @@ export default async function LikesPage({
                         name={name}
                         avatarUrl={p?.avatar_url}
                         sizeClassName="h-11 w-11"
-                        textClassName="text-xs font-semibold text-zinc-200"
-                        ringClassName="bg-zinc-700/50"
+                        textClassName="text-xs font-semibold text-zinc-700 dark:text-zinc-200"
+                        ringClassName="bg-zinc-300/70 dark:bg-zinc-700/50"
                       />
                       <div className="min-w-0 flex-1">
-                        <span className="font-medium text-zinc-200">{name}</span>
-                        <p className="text-xs text-zinc-500">
+                        <span className="font-medium text-zinc-800 dark:text-zinc-200">{name}</span>
+                        <p className="text-xs text-zinc-600 dark:text-zinc-500">
                           {p ? "We’ll notify you if they like you back." : "Like is saved."}
                         </p>
                       </div>
-                      <span className="shrink-0 text-zinc-600" aria-hidden>
+                      <span className="shrink-0 text-zinc-700 dark:text-zinc-600" aria-hidden>
                         →
                       </span>
                     </Link>
