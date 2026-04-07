@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { createFollowUpReminderAction, generateMatchOpenersAction } from "@/app/matches/actions";
 import { useThemeSetting } from "@/components/theme-provider";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import type { EmojiClickData } from "emoji-picker-react";
+import { Theme, type EmojiClickData } from "emoji-picker-react";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 const RECENT_EMOJI_KEY = "prodlink:recent-emojis";
@@ -714,7 +714,7 @@ export function MatchThreadClient({
             lazyLoadEmojis
             previewConfig={{ showPreview: false }}
             skinTonesDisabled={false}
-            theme={isLight ? "light" : "dark"}
+            theme={isLight ? Theme.LIGHT : Theme.DARK}
           />
         </div>
       ) : null}
