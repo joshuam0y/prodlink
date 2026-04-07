@@ -269,8 +269,8 @@ export function SiteHeader({
         </div>
       </header>
 
-      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-screen md:w-[268px] md:flex-col md:justify-between md:px-4 md:py-5">
-        <div className="flex w-full flex-col gap-5">
+      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-[100dvh] md:w-[268px] md:flex-col md:overflow-hidden md:px-4 md:py-4">
+        <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
           <Link href={brandHref} className="inline-flex shrink-0 self-start" aria-label="prodLink home">
             <Image
               src={logoSrc}
@@ -281,7 +281,7 @@ export function SiteHeader({
               priority
             />
           </Link>
-          <nav className="flex w-full flex-col gap-1.5">
+          <nav className="flex min-h-0 w-full flex-1 flex-col gap-1.5 overflow-y-auto pr-1">
             {links.map(({ href, label }) => {
               const badge = badgeForHref(href);
               const Icon = navLinkIcon[href];
@@ -308,7 +308,7 @@ export function SiteHeader({
           </nav>
         </div>
 
-        <div className="flex w-full flex-col gap-2 border-t border-white/10 pt-4">
+        <div className="mt-3 flex w-full shrink-0 flex-col gap-2 border-t border-white/10 pt-3">
           {user ? (
             <Link
               href="/points"

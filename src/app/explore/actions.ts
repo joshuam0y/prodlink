@@ -9,6 +9,24 @@ import { awardPoints, POINT_VALUES, spendPoints } from "@/lib/points";
 import { isUuid } from "@/lib/uuid";
 
 export type DiscoverAction = "pass" | "save";
+const DAILY_LIKE_LIMIT = 25;
+
+async function hasReachedDailyLikeLimit(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+): Promise<boolean> {
+  const now = new Date();
+  const dayStartIso = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0),
+  ).toISOString();
+  const { count } = await supabase
+    .from("discover_swipes")
+    .select("viewer_id", { count: "exact", head: true })
+    .eq("viewer_id", userId)
+    .in("action", ["save", "interested"])
+    .gte("created_at", dayStartIso);
+  return (count ?? 0) >= DAILY_LIKE_LIMIT;
+}
 
 async function getActorName(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -148,6 +166,10 @@ export async function recordDiscoverAction(
     .maybeSingle();
   const beforeAction = beforeRow?.action as string | undefined;
   const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
+  if (action === "save" && !hadLikeBefore) {
+    const limitReached = await hasReachedDailyLikeLimit(supabase, user.id);
+    if (limitReached) return { ok: false };
+  }
 
   const { data: reciprocalBefore } = await supabase
     .from("discover_swipes")
@@ -239,6 +261,10 @@ export async function setDiscoverAction(
     .maybeSingle();
   const beforeAction = beforeRow?.action as string | undefined;
   const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
+  if (action === "save" && !hadLikeBefore) {
+    const limitReached = await hasReachedDailyLikeLimit(supabase, user.id);
+    if (limitReached) return { ok: false };
+  }
   const { data: reciprocalBefore } = await supabase
     .from("discover_swipes")
     .select("action")

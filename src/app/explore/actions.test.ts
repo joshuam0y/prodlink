@@ -10,6 +10,7 @@ const { revalidatePath, createNotification, trackServerEvent, isUuid, mockSupaba
     mockSupabase: {
       auth: { getUser: async () => ({ data: { user: { id: "viewer-1" } } }) },
       from: vi.fn(),
+      rpc: vi.fn(async () => ({ data: [{ applied: true }], error: null })),
     },
   }),
 );
@@ -64,6 +65,12 @@ describe("resetDiscoverSwipes", () => {
 describe("setDiscoverAction", () => {
   it("creates notifications when saving back from likes", async () => {
     const upsert = vi.fn().mockResolvedValue({ error: null });
+    const beforeMaybeSingle = vi.fn().mockResolvedValue({ data: null });
+    const beforeEqTarget = vi.fn(() => ({ maybeSingle: beforeMaybeSingle }));
+    const beforeEqViewer = vi.fn(() => ({ eq: beforeEqTarget }));
+    const likeLimitGte = vi.fn().mockResolvedValue({ count: 0 });
+    const likeLimitIn = vi.fn(() => ({ gte: likeLimitGte }));
+    const likeLimitEq = vi.fn(() => ({ in: likeLimitIn }));
     const reciprocalMaybeSingle = vi.fn().mockResolvedValue({ data: { viewer_id: "target-1" } });
     const reciprocalIn = vi.fn(() => ({ maybeSingle: reciprocalMaybeSingle }));
     const reciprocalEqTarget = vi.fn(() => ({ in: reciprocalIn }));
@@ -71,12 +78,18 @@ describe("setDiscoverAction", () => {
     const profileMaybeSingle = vi.fn().mockResolvedValue({ data: { display_name: "DJ Nova" } });
     const profileEq = vi.fn(() => ({ maybeSingle: profileMaybeSingle }));
     const profileSelect = vi.fn(() => ({ eq: profileEq }));
+    const discoverSelect = vi
+      .fn()
+      .mockImplementationOnce(() => ({ eq: beforeEqViewer }))
+      .mockImplementationOnce(() => ({ eq: likeLimitEq }))
+      .mockImplementationOnce(() => ({ eq: reciprocalEqViewer }))
+      .mockImplementationOnce(() => ({ eq: reciprocalEqViewer }));
 
     mockSupabase.from.mockImplementation((table: string) => {
       if (table === "discover_swipes") {
         return {
           upsert,
-          select: vi.fn(() => ({ eq: reciprocalEqViewer })),
+          select: discoverSelect,
         };
       }
       if (table === "profiles") {

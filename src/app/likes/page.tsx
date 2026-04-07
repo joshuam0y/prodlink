@@ -38,13 +38,22 @@ export default async function LikesPage({
     .select("viewer_id, action, created_at")
     .eq("target_id", user.id)
     .in("action", ["save", "interested"]);
+  const {
+    data: passedByYou,
+    error: passedByYouError,
+  } = await supabase
+    .from("discover_swipes")
+    .select("target_id")
+    .eq("viewer_id", user.id)
+    .eq("action", "pass");
 
   const outgoingIds = new Set((outgoing ?? []).map((r) => r.target_id as string));
   const incomingIds = new Set((incoming ?? []).map((r) => r.viewer_id as string));
+  const passedByYouIds = new Set((passedByYou ?? []).map((r) => r.target_id as string));
   const matches = new Set<string>();
   for (const id of outgoingIds) if (incomingIds.has(id)) matches.add(id);
 
-  const likesYouIds = [...incomingIds].filter((id) => !matches.has(id));
+  const likesYouIds = [...incomingIds].filter((id) => !matches.has(id) && !passedByYouIds.has(id));
   const youLikedIds = [...outgoingIds].filter((id) => !matches.has(id));
   const matchIds = [...matches].sort((a, b) => a.localeCompare(b));
   const allIds = [...new Set([...likesYouIds, ...youLikedIds, ...matchIds])];
@@ -71,6 +80,7 @@ export default async function LikesPage({
   const queryError =
     outgoingError?.message ??
     incomingError?.message ??
+    passedByYouError?.message ??
     profilesError ??
     null;
 

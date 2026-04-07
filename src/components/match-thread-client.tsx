@@ -2,9 +2,15 @@
 
 import type { FormEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { createFollowUpReminderAction, generateMatchOpenersAction } from "@/app/matches/actions";
 import { useThemeSetting } from "@/components/theme-provider";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import type { EmojiClickData } from "emoji-picker-react";
+
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+const RECENT_EMOJI_KEY = "prodlink:recent-emojis";
+const MAX_RECENT_EMOJIS = 12;
 
 type Message = {
   id: number | string;
@@ -105,6 +111,7 @@ export function MatchThreadClient({
   }, [matchName, matchRole]);
   const [quickOpeners, setQuickOpeners] = useState(defaultOpeners);
   const [emojiOpen, setEmojiOpen] = useState(false);
+  const [recentEmojis, setRecentEmojis] = useState<string[]>([]);
   const [uploadingMedia, setUploadingMedia] = useState(false);
   const [recording, setRecording] = useState(false);
   const listRef = useRef<HTMLUListElement | null>(null);
@@ -487,6 +494,35 @@ export function MatchThreadClient({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(RECENT_EMOJI_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed)) return;
+      const clean = parsed.filter((v): v is string => typeof v === "string" && v.length > 0);
+      setRecentEmojis(clean.slice(0, MAX_RECENT_EMOJIS));
+    } catch {
+      // Ignore malformed local state.
+    }
+  }, []);
+
+  const applyEmoji = useCallback((emoji: string) => {
+    if (!emoji) return;
+    setBody((prev) => `${prev}${emoji}`);
+    setRecentEmojis((prev) => {
+      const next = [emoji, ...prev.filter((item) => item !== emoji)].slice(0, MAX_RECENT_EMOJIS);
+      try {
+        window.localStorage.setItem(RECENT_EMOJI_KEY, JSON.stringify(next));
+      } catch {
+        // Ignore storage quota/privacy failures.
+      }
+      return next;
+    });
+    setEmojiOpen(false);
+    textareaRef.current?.focus();
+  }, []);
+
   return (
     <>
       <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-zinc-950/50">
@@ -653,21 +689,33 @@ export function MatchThreadClient({
           </div>
         </div>
       ) : null}
-      {emojiOpen ? (
-        <div className="mt-3 flex flex-wrap gap-2 rounded-xl border border-zinc-300/80 bg-white/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
-          {["🔥", "🎧", "🎤", "🎶", "📍", "🫡", "👀", "💿", "🙏", "🤝", "😮‍💨", "🖤"].map((emoji) => (
+      {recentEmojis.length > 0 ? (
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-zinc-300/80 bg-white/90 px-3 py-2 dark:border-white/10 dark:bg-white/[0.03]">
+          <p className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">Recent</p>
+          {recentEmojis.map((emoji) => (
             <button
               key={emoji}
               type="button"
-              onClick={() => {
-                setBody((prev) => `${prev}${emoji}`);
-                textareaRef.current?.focus();
-              }}
-              className="rounded-full border border-zinc-300/80 bg-zinc-100/80 px-3 py-1.5 text-lg transition hover:bg-zinc-200/80 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
+              onClick={() => applyEmoji(emoji)}
+              className="rounded-full border border-zinc-300/80 bg-zinc-100/80 px-2.5 py-1 text-base transition hover:bg-zinc-200/80 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
+              aria-label={`Use recent emoji ${emoji}`}
             >
               {emoji}
             </button>
           ))}
+        </div>
+      ) : null}
+      {emojiOpen ? (
+        <div className="mt-3 overflow-hidden rounded-xl border border-zinc-300/80 bg-white/95 p-2 dark:border-white/10 dark:bg-zinc-950/70">
+          <EmojiPicker
+            onEmojiClick={(emojiData: EmojiClickData) => applyEmoji(emojiData.emoji)}
+            width="100%"
+            height={340}
+            lazyLoadEmojis
+            previewConfig={{ showPreview: false }}
+            skinTonesDisabled={false}
+            theme={isLight ? "light" : "dark"}
+          />
         </div>
       ) : null}
       <div className="mt-3 flex items-center justify-end">
@@ -941,7 +989,9 @@ export function MatchThreadClient({
           </div>
           <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
             <p className="text-[11px] text-zinc-600 sm:text-right">
-              {uploadingMedia ? "Uploading..." : "Enter sends, Shift+Enter adds a line."}
+              {uploadingMedia
+                ? "Uploading..."
+                : "Enter sends, Shift+Enter adds a line. Mobile emoji keyboard works too."}
             </p>
             <button
               type="submit"

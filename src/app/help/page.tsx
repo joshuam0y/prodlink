@@ -29,17 +29,17 @@ export default function HelpPage() {
         <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-800 dark:text-zinc-100">
           Common questions
         </h2>
-        <dl className="mt-4 space-y-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">Is prodLink finished?</dt>
+        <dl className="mt-4 space-y-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">Is prodLink finished?</dt>
             <dd className="mt-1.5">
               No. We&apos;re in <strong className="font-medium text-zinc-800 dark:text-zinc-300">beta</strong>.
               Features and policies will evolve, and we&apos;re building with early users and
               feedback.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">Who is prodLink for?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">Who is prodLink for?</dt>
             <dd className="mt-1.5">
               Especially{" "}
               <strong className="font-medium text-zinc-300">
@@ -50,8 +50,8 @@ export default function HelpPage() {
               global popularity contest. Venues and engineers are welcome too.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">Can I buy or sell beats in the app?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">Can I buy or sell beats in the app?</dt>
             <dd className="mt-1.5">
               <strong className="font-medium text-zinc-800 dark:text-zinc-300">In-app checkout is not live yet.</strong>{" "}
               We plan <strong className="font-medium text-zinc-800 dark:text-zinc-300">in-app sales for beats and bundles</strong>{" "}
@@ -59,8 +59,8 @@ export default function HelpPage() {
               that ships, anything you arrange off-platform is between you and the other party.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">What&apos;s on the roadmap?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">What&apos;s on the roadmap?</dt>
             <dd className="mt-1.5 space-y-3">
               <p>
                 We ship in layers. Some items below are{" "}
@@ -68,7 +68,7 @@ export default function HelpPage() {
                 build may turn them on gradually). Others are{" "}
                 <strong className="font-medium text-zinc-800 dark:text-zinc-300">still coming</strong>.
               </p>
-              <ul className="list-none space-y-4 pl-0 text-zinc-600 dark:text-zinc-400">
+              <ul className="list-none space-y-4 pl-0 text-zinc-700 dark:text-zinc-300">
                 <li>
                   <p className="font-medium text-zinc-900 dark:text-zinc-200">Short audio on discover cards</p>
                   <p className="mt-1">
@@ -78,7 +78,7 @@ export default function HelpPage() {
                     feature is enabled.
                   </p>
                 </li>
-                <li className="rounded-xl border border-zinc-200/80 bg-zinc-50/80 p-3 dark:border-white/5 dark:bg-white/[0.02]">
+                <li className="rounded-xl border border-zinc-300 bg-white/80 p-3 dark:border-zinc-700 dark:bg-zinc-900/80">
                   <p className="font-medium text-zinc-200">Trust and verification</p>
                   <p className="mt-1">
                     <strong className="font-medium text-zinc-300">In the app:</strong> an optional{" "}
@@ -141,8 +141,8 @@ export default function HelpPage() {
               </ul>
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">Will there be short audio clips on cards?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">Will there be short audio clips on cards?</dt>
             <dd className="mt-1.5">
               <strong className="font-medium text-zinc-300">Yes. This is in the product.</strong> Discover
               cards can play short previews (often around{" "}
@@ -150,8 +150,8 @@ export default function HelpPage() {
               enabled for your app, so people can hear your work in context.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">What about verification?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">What about verification?</dt>
             <dd className="mt-1.5">
               You can add an optional <strong className="font-medium text-zinc-300">SoundCloud</strong>{" "}
               link on your profile when that option is available—useful context, not a full identity
@@ -160,24 +160,24 @@ export default function HelpPage() {
               we&apos;re working toward stronger trust tools over time.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">Will labels and pitching be in prodLink?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">Will labels and pitching be in prodLink?</dt>
             <dd className="mt-1.5">
               A <strong className="font-medium text-zinc-300">record label</strong> role is available in
               onboarding when that option is enabled. Dedicated{" "}
               <strong className="font-medium text-zinc-300">in-app pitching</strong> to labels (genre-agnostic) is still planned. Timing TBD.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">Can one person be both a producer and a DJ?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">Can one person be both a producer and a DJ?</dt>
             <dd className="mt-1.5">
               <strong className="font-medium text-zinc-300">Yes, when dual roles are enabled.</strong> You
               can set a primary role and an optional second role so discover and public profiles can show
               both—for example, <strong className="font-medium text-zinc-300">Producer · DJ</strong>.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">How does discover handle distance?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">How does discover handle distance?</dt>
             <dd className="mt-1.5">
               In beta, you can <strong className="font-medium text-zinc-300">filter by distance</strong>{" "}
               and use sorts such as <strong className="font-medium text-zinc-300">nearby</strong>,{" "}
@@ -186,16 +186,16 @@ export default function HelpPage() {
               neighborhood-style discovery on top of that.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">How will pricing work?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">How will pricing work?</dt>
             <dd className="mt-1.5">
               We&apos;re aiming for <strong className="font-medium text-zinc-300">fair access</strong> and
               want to avoid a steep monthly gate, like some creator platforms use. Paid details will ship
               with the features they support.
             </dd>
           </div>
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-zinc-950/30">
-            <dt className="font-medium text-zinc-900 dark:text-zinc-200">How should I stay safe?</dt>
+          <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/80 px-4 py-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+            <dt className="font-semibold text-zinc-950 dark:text-zinc-100">How should I stay safe?</dt>
             <dd className="mt-1.5">
               Be cautious of scams and fake profiles. Never assume someone is who they claim without
               checking. We&apos;re working toward stronger verification and clearer in-app tools over time.
