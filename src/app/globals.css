@@ -5,9 +5,9 @@
 /* Default = light. `dark` class on <html> restores the original prodLink night theme. */
 /* Light theme uses warm, muted surfaces — less stark white / glare than pure #fafafa. */
 :root {
-  --background: #e6e4e1;
+  --background: #f2ede6;
   --foreground: #27272a;
-  --surface: #dcd9d5;
+  --surface: #ece5dc;
   --accent: #d97706;
 }
 

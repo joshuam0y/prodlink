@@ -3,6 +3,7 @@
 import type { FormEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { generateMatchOpenersAction } from "@/app/matches/actions";
+import { useThemeSetting } from "@/components/theme-provider";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 type Message = {
@@ -70,6 +71,8 @@ export function MatchThreadClient({
   initialMessages,
   initialDraft = null,
 }: Props) {
+  const { theme } = useThemeSetting();
+  const isLight = theme === "light";
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [body, setBody] = useState(initialDraft ?? "");
   const [sending, setSending] = useState(false);
@@ -516,7 +519,9 @@ export function MatchThreadClient({
                   <div
                     className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                       mine
-                        ? "rounded-br-md bg-gradient-to-br from-amber-500/25 to-amber-600/15 text-amber-50 ring-1 ring-amber-500/30"
+                        ? isLight
+                          ? "rounded-br-md bg-amber-500 text-zinc-950 ring-1 ring-amber-600/40"
+                          : "rounded-br-md bg-amber-500 text-zinc-950 ring-1 ring-amber-500/35"
                         : "rounded-bl-md bg-white/[0.06] text-zinc-100 ring-1 ring-white/10"
                     } ${m.pending ? "opacity-70" : ""}`}
                   >
@@ -574,13 +579,13 @@ export function MatchThreadClient({
         </p>
       ) : null}
       {!blocked && messages.length === 0 ? (
-        <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+        <div className="mt-3 rounded-xl border border-zinc-300/80 bg-white/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <p className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-500">
                 Suggested openers
               </p>
-              <p className="mt-1 text-[11px] text-zinc-600">
+              <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-600">
                 Pick one and customize it so it sounds like you.
               </p>
             </div>
@@ -598,7 +603,7 @@ export function MatchThreadClient({
                 }
                 setLoadingOpeners(false);
               }}
-              className="text-[11px] font-medium text-amber-300 transition hover:text-amber-200 disabled:opacity-40"
+              className="text-[11px] font-medium text-amber-700 transition hover:text-amber-800 disabled:opacity-40 dark:text-amber-300 dark:hover:text-amber-200"
             >
               {loadingOpeners ? "Thinking..." : "Refresh"}
             </button>
@@ -612,7 +617,7 @@ export function MatchThreadClient({
                   setBody(opener);
                   window.setTimeout(() => textareaRef.current?.focus(), 0);
                 }}
-                className="rounded-full border border-white/15 px-3 py-1.5 text-xs text-zinc-300 transition hover:bg-white/5"
+                className="rounded-full border border-zinc-300/80 px-3 py-1.5 text-xs text-zinc-700 transition hover:bg-zinc-100 dark:border-white/15 dark:text-zinc-300 dark:hover:bg-white/5"
               >
                 {opener.length > 44 ? `${opener.slice(0, 44)}...` : opener}
               </button>
@@ -621,7 +626,7 @@ export function MatchThreadClient({
         </div>
       ) : null}
       {emojiOpen ? (
-        <div className="mt-3 flex flex-wrap gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+        <div className="mt-3 flex flex-wrap gap-2 rounded-xl border border-zinc-300/80 bg-white/90 p-3 dark:border-white/10 dark:bg-white/[0.03]">
           {["🔥", "🎧", "🎤", "🎶", "📍", "🫡", "👀", "💿", "🙏", "🤝", "😮‍💨", "🖤"].map((emoji) => (
             <button
               key={emoji}
@@ -630,7 +635,7 @@ export function MatchThreadClient({
                 setBody((prev) => `${prev}${emoji}`);
                 textareaRef.current?.focus();
               }}
-              className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-lg transition hover:bg-white/[0.08]"
+              className="rounded-full border border-zinc-300/80 bg-zinc-100/80 px-3 py-1.5 text-lg transition hover:bg-zinc-200/80 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.08]"
             >
               {emoji}
             </button>
@@ -645,24 +650,24 @@ export function MatchThreadClient({
               setMenuOpen((v) => !v);
               setConfirmAction(null);
             }}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-sm font-semibold text-zinc-200 transition hover:bg-white/10"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-300/80 bg-white/90 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-white/10"
             aria-label="Conversation options"
             aria-expanded={menuOpen}
           >
             ⋯
           </button>
           {menuOpen ? (
-            <div className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/95 p-2 shadow-2xl backdrop-blur">
+            <div className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-2xl border border-zinc-300/80 bg-white/95 p-2 shadow-2xl backdrop-blur dark:border-white/10 dark:bg-zinc-950/95">
               {confirmAction ? (
                 <div className="space-y-2 p-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
                     {confirmAction === "report"
                       ? "Report conversation?"
                       : confirmAction === "block"
                         ? "Block profile?"
                         : "Unblock profile?"}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-zinc-600 dark:text-zinc-500">
                     {confirmAction === "report"
                       ? "We’ll review this chat. Use this for spam or abuse."
                       : confirmAction === "block"
@@ -670,12 +675,12 @@ export function MatchThreadClient({
                         : "Messaging will be re-enabled if they haven’t blocked you."}
                   </p>
                   {confirmAction === "report" ? (
-                    <label className="block text-xs font-medium text-zinc-400">
+                    <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400">
                       Reason
                       <select
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-white/10 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-200"
+                        className="mt-1 w-full rounded-lg border border-zinc-300/80 bg-white px-2 py-1.5 text-xs text-zinc-900 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-200"
                       >
                         <option value="abusive_or_spam">Abusive or spam</option>
                         <option value="harassment">Harassment</option>
@@ -689,7 +694,7 @@ export function MatchThreadClient({
                     <button
                       type="button"
                       onClick={() => setConfirmAction(null)}
-                      className="flex-1 rounded-full border border-white/15 px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-white/5"
+                      className="flex-1 rounded-full border border-zinc-300/80 px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-white/15 dark:text-zinc-300 dark:hover:bg-white/5"
                     >
                       Cancel
                     </button>
@@ -785,10 +790,10 @@ export function MatchThreadClient({
                     type="button"
                     disabled={messages.length === 0}
                     onClick={() => setConfirmAction("report")}
-                    className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm text-zinc-200 hover:bg-white/5 disabled:opacity-40"
+                    className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5 disabled:opacity-40"
                   >
                     <span>Report</span>
-                    <span className="text-xs text-zinc-500">Spam/abuse</span>
+                    <span className="text-xs text-zinc-500 dark:text-zinc-500">Spam/abuse</span>
                   </button>
                   <button
                     type="button"
@@ -810,7 +815,7 @@ export function MatchThreadClient({
       </div>
       <form
         ref={formRef}
-        className="mt-3 rounded-2xl border border-white/10 bg-zinc-900/60 p-2 shadow-inner shadow-black/20"
+        className="mt-3 rounded-2xl border border-white/10 bg-zinc-900/45 p-2 shadow-inner shadow-black/15"
         onSubmit={onSubmit}
       >
         {firstMessage ? (
@@ -846,7 +851,7 @@ export function MatchThreadClient({
             void sendMessage();
           }}
           onBlur={() => sendTyping(false)}
-          className="w-full resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-0"
+          className="w-full resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-0"
           placeholder={`Message ${matchName}...`}
         />
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/5 px-2 pb-1 pt-2">

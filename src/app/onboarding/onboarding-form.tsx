@@ -453,7 +453,7 @@ export function OnboardingForm({ error }: Props) {
             />
           </label>
         </div>
-        <div className="mt-6 rounded-xl border border-white/10 bg-zinc-900/30 p-4">
+        <div className="mt-6 rounded-xl border border-white/10 bg-zinc-900/40 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             Profile prompt 2
           </p>

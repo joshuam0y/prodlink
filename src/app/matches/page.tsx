@@ -207,21 +207,21 @@ export default async function MatchesPage({
         </p>
       </div>
       <section className="mb-6 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-4">
+        <div className="rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/40">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
             Needs reply
           </p>
           <p className="mt-2 text-2xl font-semibold text-zinc-50">{yourTurnCount}</p>
           <p className="mt-1 text-xs text-zinc-500">Conversations where they spoke last.</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-4">
+        <div className="rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/40">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
             Unread
           </p>
           <p className="mt-2 text-2xl font-semibold text-zinc-50">{unreadThreadCount}</p>
           <p className="mt-1 text-xs text-zinc-500">Matches with unread incoming messages.</p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-4">
+        <div className="rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/40">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
             New matches
           </p>
@@ -266,11 +266,11 @@ export default async function MatchesPage({
 
           return (
             <li key={id}>
-              <article className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-lg shadow-black/20">
+              <article className="overflow-hidden rounded-2xl border border-zinc-300/80 bg-white/90 shadow-[0_10px_24px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-gradient-to-b dark:from-white/[0.06] dark:to-white/[0.02] dark:shadow-lg dark:shadow-black/20">
                 <div className="p-4">
                   <Link
                     href={`/matches/${id}`}
-                    className="flex gap-3 rounded-xl transition hover:bg-white/[0.04]"
+                    className="flex gap-3 rounded-xl transition hover:bg-zinc-100/80 dark:hover:bg-white/[0.04]"
                   >
                     <ProfileAvatar
                       name={name}
@@ -284,12 +284,12 @@ export default async function MatchesPage({
                         <div className="min-w-0">
                           <span className="font-semibold text-zinc-50">{name}</span>
                           {meta ? (
-                            <p className="mt-0.5 truncate text-xs text-zinc-500">{meta}</p>
+                            <p className="mt-0.5 truncate text-xs text-zinc-600 dark:text-zinc-500">{meta}</p>
                           ) : null}
                           {activity.text ? (
                             <p
                               className={`mt-0.5 truncate text-[11px] ${
-                                activity.recent ? "text-emerald-400/85" : "text-zinc-500"
+                                activity.recent ? "text-emerald-300/90" : "text-zinc-500"
                               }`}
                             >
                               {activity.text}
@@ -298,7 +298,7 @@ export default async function MatchesPage({
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-1">
                           {isNewMatch ? (
-                            <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
+                            <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-900 dark:text-amber-200">
                               New
                             </span>
                           ) : null}
@@ -324,16 +324,16 @@ export default async function MatchesPage({
                       href={`/matches/${id}?draft=${encodeURIComponent(
                         buildDefaultDraftOpener(name, p?.role),
                       )}`}
-                      className="mt-3 inline-flex w-fit items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-semibold text-amber-200 hover:bg-amber-500/15"
+                    className="mt-3 inline-flex w-fit items-center rounded-full border border-amber-500/35 bg-amber-500/15 px-3 py-1 text-[11px] font-semibold text-amber-900 hover:bg-amber-500/20 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200 dark:hover:bg-amber-500/15"
                     >
                       Start chat
                     </Link>
                   ) : null}
                 </div>
-                <div className="flex items-center justify-between border-t border-white/5 px-4 py-2">
+                <div className="flex items-center justify-between border-t border-zinc-200/90 px-4 py-2 dark:border-white/5">
                   <Link
                     href={`/p/${id}`}
-                    className="text-xs font-medium text-zinc-500 transition hover:text-zinc-300"
+                    className="text-xs font-medium text-zinc-600 transition hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-300"
                   >
                     View profile
                   </Link>
@@ -346,7 +346,7 @@ export default async function MatchesPage({
                   >
                     <button
                       type="submit"
-                      className="text-xs font-medium text-zinc-500 transition hover:text-red-300/90"
+                      className="text-xs font-medium text-zinc-600 transition hover:text-red-700 dark:text-zinc-500 dark:hover:text-red-300/90"
                     >
                       Unmatch
                     </button>

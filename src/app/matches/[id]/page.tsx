@@ -112,31 +112,31 @@ export default async function MatchConversationPage({ params, searchParams }: Pr
         <div className="mx-auto flex max-w-lg items-center gap-3 px-4 py-3 sm:px-6">
           <Link
             href="/matches"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 text-zinc-400 transition hover:bg-white/5 hover:text-zinc-100"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-zinc-300/80 text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:border-white/10 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100"
             aria-label="Back to messages"
           >
             ←
           </Link>
           <Link
             href={`/p/${id}`}
-            className="flex min-w-0 flex-1 items-center gap-3 rounded-xl py-1 transition hover:bg-white/[0.04]"
+            className="flex min-w-0 flex-1 items-center gap-3 rounded-xl py-1 transition hover:bg-zinc-100/80 dark:hover:bg-white/[0.04]"
           >
             <ProfileAvatar
               name={name}
               avatarUrl={profile.avatar_url}
               sizeClassName="h-10 w-10"
-              textClassName="text-xs font-semibold text-amber-50"
+              textClassName="text-xs font-semibold text-zinc-900 dark:text-amber-50"
               ringClassName="bg-gradient-to-br from-amber-500/35 to-amber-700/25"
             />
             <div className="min-w-0">
               <h1 className="truncate text-base font-semibold text-zinc-50">{name}</h1>
-              <p className="truncate text-xs text-zinc-500">
+              <p className="truncate text-xs text-zinc-600 dark:text-zinc-500">
                 {[profile.role?.trim(), profile.city?.trim(), profile.niche?.trim()].filter(Boolean).join(" · ") || "Tap for full profile"}
               </p>
               {peerActivity.text ? (
                 <p
                   className={`truncate text-[11px] ${
-                    peerActivity.recent ? "text-emerald-400/85" : "text-zinc-500"
+                    peerActivity.recent ? "text-emerald-300/90" : "text-zinc-500"
                   }`}
                 >
                   {peerActivity.text}
