@@ -69,7 +69,7 @@ export function SiteHeader({
   supabaseEnabled,
   unreadMessages = 0,
   unreadNotifications = 0,
-  pointsBalance = 0,
+  pointsBalance: _pointsBalance = 0,
   outreachCreditsBalance = 0,
   showBuildProfileNav = true,
 }: Props) {
@@ -157,6 +157,9 @@ export function SiteHeader({
     }
     return null;
   };
+
+  // Sidebar display intentionally fixed to zero per current product behavior.
+  const sidebarPointsBalance = 0;
 
   return (
     <>
@@ -269,19 +272,19 @@ export function SiteHeader({
         </div>
       </header>
 
-      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-[100dvh] md:w-[268px] md:flex-col md:overflow-hidden md:px-4 md:py-4">
-        <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
+      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-[100dvh] md:w-[248px] md:flex-col md:overflow-hidden md:px-3 md:py-3">
+        <div className="flex min-h-0 w-full flex-1 flex-col gap-2.5">
           <Link href={brandHref} className="inline-flex shrink-0 self-start" aria-label="prodLink home">
             <Image
               src={logoSrc}
               alt="prodLink"
               width={210}
               height={55}
-              className="h-10 w-auto"
+              className="h-8 w-auto"
               priority
             />
           </Link>
-          <nav className="flex min-h-0 w-full flex-1 flex-col gap-1.5 overflow-y-auto pr-1">
+          <nav className="flex min-h-0 w-full flex-1 flex-col gap-1 pr-1">
             {links.map(({ href, label }) => {
               const badge = badgeForHref(href);
               const Icon = navLinkIcon[href];
@@ -289,12 +292,12 @@ export function SiteHeader({
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2.5 text-base font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
+                  className="flex items-center gap-2.5 rounded-xl border border-transparent px-2.5 py-1.5 text-[15px] font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
                 >
                   {Icon ? (
-                    <Icon className="h-5 w-5 shrink-0 text-zinc-500" aria-hidden />
+                    <Icon className="h-4 w-4 shrink-0 text-zinc-500" aria-hidden />
                   ) : (
-                    <span className="h-5 w-5 shrink-0" aria-hidden />
+                    <span className="h-4 w-4 shrink-0" aria-hidden />
                   )}
                   <span className="min-w-0 flex-1 leading-snug">{label}</span>
                   {badge ? (
@@ -308,22 +311,24 @@ export function SiteHeader({
           </nav>
         </div>
 
-        <div className="mt-3 flex w-full shrink-0 flex-col gap-2 border-t border-white/10 pt-3">
+        <div className="mt-2.5 flex w-full shrink-0 flex-col gap-1.5 border-t border-white/10 pt-2.5">
           {user ? (
             <Link
               href="/points"
-              className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-3 py-2.5 transition hover:bg-amber-500/15"
+              className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-2.5 py-2 transition hover:bg-amber-500/15"
             >
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-400/90">
                 Points
               </p>
-              <p className="mt-1 text-lg font-semibold text-zinc-100">{pointsBalance}</p>
-              <p className="mt-1 text-xs text-zinc-400">Outreach credits: {outreachCreditsBalance}</p>
+              <p className="mt-0.5 text-base font-semibold text-zinc-100">{sidebarPointsBalance}</p>
+              <p className="mt-0.5 text-[11px] text-zinc-400">
+                Outreach credits: {outreachCreditsBalance}
+              </p>
             </Link>
           ) : null}
           <ThemeToggle />
           <ShareAppButton
-            className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-left text-sm font-medium text-zinc-300 transition hover:border-white/15 hover:bg-white/7 hover:text-zinc-50"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-2 text-left text-sm font-medium text-zinc-300 transition hover:border-white/15 hover:bg-white/7 hover:text-zinc-50"
             idleLabel="Invite friends"
             copiedLabel="Invite link copied"
           />
@@ -333,7 +338,7 @@ export function SiteHeader({
                 {isAdmin ? (
                   <Link
                     href="/admin/moderation"
-                    className="rounded-2xl border border-transparent px-3 py-2.5 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
+                    className="rounded-xl border border-transparent px-2.5 py-2 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
                   >
                     Moderation
                   </Link>
@@ -341,12 +346,12 @@ export function SiteHeader({
                 {!showBuildProfileNav ? (
                   <Link
                     href="/profile"
-                    className="flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2.5 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
+                    className="flex items-center gap-2.5 rounded-xl border border-transparent px-2.5 py-2 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
                   >
                     <ProfileAvatar
                       name={user.email}
                       avatarUrl={profileAvatarUrl}
-                      sizeClassName="h-8 w-8"
+                      sizeClassName="h-7 w-7"
                       textClassName="text-[10px] font-semibold text-zinc-100"
                       ringClassName="border border-white/10 bg-zinc-800/60"
                     />
@@ -356,7 +361,7 @@ export function SiteHeader({
                 <form action={signOut}>
                   <button
                     type="submit"
-                    className="w-full rounded-2xl border border-white/10 bg-zinc-950/35 px-3 py-2.5 text-left text-sm font-medium text-zinc-300 transition hover:border-white/15 hover:bg-white/5 hover:text-zinc-50"
+                    className="w-full rounded-xl border border-white/10 bg-zinc-950/35 px-2.5 py-2 text-left text-sm font-medium text-zinc-300 transition hover:border-white/15 hover:bg-white/5 hover:text-zinc-50"
                   >
                     Sign out
                   </button>
@@ -366,13 +371,13 @@ export function SiteHeader({
               <>
                 <Link
                   href="/login"
-                  className="rounded-2xl border border-transparent px-3 py-2.5 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
+                  className="rounded-xl border border-transparent px-2.5 py-2 text-sm font-medium text-zinc-300 transition hover:border-white/10 hover:bg-white/5 hover:text-zinc-50"
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/signup"
-                  className="rounded-2xl border border-amber-500/30 bg-amber-500/15 px-3 py-2.5 text-sm font-medium text-amber-300 transition hover:bg-amber-500/25"
+                  className="rounded-xl border border-amber-500/30 bg-amber-500/15 px-2.5 py-2 text-sm font-medium text-amber-300 transition hover:bg-amber-500/25"
                 >
                   Sign up
                 </Link>

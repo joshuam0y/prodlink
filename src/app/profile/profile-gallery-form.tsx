@@ -8,7 +8,7 @@ import { parseGalleryImageUrls } from "@/lib/profile-gallery";
 import { updateProfileGalleryImages } from "./actions";
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500/20 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-amber-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 file:mr-2.5 file:rounded-lg file:border-0 file:bg-amber-100 file:px-2.5 file:py-1 file:text-xs file:font-semibold file:text-amber-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:file:bg-amber-500/20 dark:file:text-amber-200 dark:placeholder:text-zinc-600";
 
 const MAX = 6;
 
@@ -53,9 +53,9 @@ export function ProfileGalleryForm({ initialUrls }: { initialUrls: unknown }) {
   };
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-      <h2 className="text-sm font-semibold text-zinc-100">More photos</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/40">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">More photos</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
         Add up to {MAX} images for your public profile gallery (shown alongside your main photo and track previews).
       </p>
 
@@ -66,7 +66,7 @@ export function ProfileGalleryForm({ initialUrls }: { initialUrls: unknown }) {
       ) : null}
 
       {urls.length > 0 ? (
-        <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <ul className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
           {urls.map((url) => (
             <li key={url} className="relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-zinc-950/50">
               <Image src={url} alt="" fill className="object-cover" unoptimized />
@@ -84,8 +84,8 @@ export function ProfileGalleryForm({ initialUrls }: { initialUrls: unknown }) {
       ) : null}
 
       {urls.length < MAX ? (
-        <div className="mt-5">
-          <label className="block text-xs font-medium text-zinc-500">
+        <div className="mt-4">
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
             Add image
             <input
               type="file"
@@ -126,13 +126,15 @@ export function ProfileGalleryForm({ initialUrls }: { initialUrls: unknown }) {
                 }
               });
             }}
-            className="mt-3 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40"
+            className="mt-2.5 rounded-full bg-amber-500 px-3.5 py-1.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40"
           >
             {pending ? "Uploading…" : "Upload"}
           </button>
         </div>
       ) : (
-        <p className="mt-4 text-xs text-zinc-500">Maximum {MAX} extra photos reached. Remove one to add another.</p>
+        <p className="mt-4 text-xs text-zinc-700 dark:text-zinc-400">
+          Maximum {MAX} extra photos reached. Remove one to add another.
+        </p>
       )}
     </section>
   );

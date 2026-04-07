@@ -50,7 +50,7 @@ function PreviewBox({
 }
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500/20 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-amber-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 file:mr-2.5 file:rounded-lg file:border-0 file:bg-amber-100 file:px-2.5 file:py-1 file:text-xs file:font-semibold file:text-amber-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:file:bg-amber-500/20 dark:file:text-amber-200 dark:placeholder:text-zinc-600";
 
 function extFromFile(file: File): string {
   const byName = file.name.split(".").pop()?.toLowerCase();
@@ -205,9 +205,9 @@ export function ProfileVenuePhotosForm({
   }
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-      <h2 className="text-sm font-semibold text-zinc-100">Venue photos</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/40">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Venue photos</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
         Upload 1 featured photo and up to 5 more images. Venues don&apos;t need track
         audio — photos show what your space is like.
       </p>
@@ -224,23 +224,23 @@ export function ProfileVenuePhotosForm({
         </p>
       ) : null}
 
-      <div className="mt-6 space-y-4">
+      <div className="mt-5 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
             Featured photo
           </h3>
           {(starCoverUrl || starCoverFile) && (
             <button
               type="button"
               onClick={clearStar}
-              className="text-xs text-zinc-500 underline decoration-zinc-600 hover:text-zinc-300"
+              className="text-xs text-zinc-700 underline decoration-zinc-500 hover:text-zinc-900 dark:text-zinc-500 dark:decoration-zinc-600 dark:hover:text-zinc-300"
             >
               Remove featured photo
             </button>
           )}
         </div>
 
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Cover image (optional)
           <input
             type="file"
@@ -251,20 +251,20 @@ export function ProfileVenuePhotosForm({
         </label>
         {starCoverUrl || starCoverFile ? (
           <div className="space-y-2">
-            <p className="text-xs text-zinc-600">Featured preview</p>
+            <p className="text-xs text-zinc-700 dark:text-zinc-500">Featured preview</p>
             <PreviewBox
               file={starCoverFile}
               url={starCoverUrl}
               alt="Featured venue photo preview"
-              wrapperClassName="relative h-36 w-full overflow-hidden rounded-xl border border-white/10 bg-zinc-950/40"
+              wrapperClassName="relative h-32 w-full overflow-hidden rounded-xl border border-white/10 bg-zinc-950/40"
             />
           </div>
         ) : null}
       </div>
 
-      <div className="mt-10 space-y-6">
+      <div className="mt-7 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
             More photos (max 5)
           </h3>
           <button
@@ -278,15 +278,15 @@ export function ProfileVenuePhotosForm({
         </div>
 
         {slots.length === 0 ? (
-          <p className="text-sm text-zinc-600">No extra photos yet.</p>
+          <p className="text-sm text-zinc-700 dark:text-zinc-500">No extra photos yet.</p>
         ) : (
-          <ul className="space-y-6">
+          <ul className="space-y-4">
             {slots.map((s, i) => (
               <li
                 key={i}
-                className="rounded-xl border border-white/5 bg-zinc-950/40 p-4"
+                className="rounded-xl border border-white/5 bg-zinc-950/40 p-3"
               >
-                <div className="mb-3 flex justify-end">
+                <div className="mb-2 flex justify-end">
                   <button
                     type="button"
                     onClick={() => removeSlot(i)}
@@ -296,7 +296,7 @@ export function ProfileVenuePhotosForm({
                   </button>
                 </div>
 
-                <label className="block text-xs font-medium text-zinc-500">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
                   Photo
                   <input
                     type="file"
@@ -309,12 +309,12 @@ export function ProfileVenuePhotosForm({
                 </label>
 
                 {s.coverUrl || s.coverFile ? (
-                  <div className="mt-2">
+                  <div className="mt-1.5">
                     <PreviewBox
                       file={s.coverFile}
                       url={s.coverUrl}
                       alt={`Venue photo ${i + 1} preview`}
-                      wrapperClassName="relative h-28 w-full overflow-hidden rounded-lg border border-white/10 bg-zinc-950/40"
+                      wrapperClassName="relative h-24 w-full overflow-hidden rounded-lg border border-white/10 bg-zinc-950/40"
                     />
                   </div>
                 ) : null}
@@ -328,7 +328,7 @@ export function ProfileVenuePhotosForm({
         type="button"
         disabled={pending}
         onClick={save}
-        className="mt-8 w-full rounded-full bg-amber-500 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40 sm:w-auto sm:px-8"
+        className="mt-6 w-full rounded-full bg-amber-500 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40 sm:w-auto sm:px-7"
       >
         {pending ? "Saving…" : "Save photos"}
       </button>
