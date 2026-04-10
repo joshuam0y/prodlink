@@ -158,8 +158,6 @@ export function SiteHeader({
     return null;
   };
 
-  // Sidebar display intentionally fixed to zero per current product behavior.
-  const sidebarPointsBalance = 0;
 
   return (
     <>
@@ -320,7 +318,7 @@ export function SiteHeader({
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-400/90">
                 Points
               </p>
-              <p className="mt-0.5 text-base font-semibold text-zinc-100">{sidebarPointsBalance}</p>
+              <p className="mt-0.5 text-base font-semibold text-zinc-100">{_pointsBalance}</p>
               <p className="mt-0.5 text-[11px] text-zinc-400">
                 Outreach credits: {outreachCreditsBalance}
               </p>
