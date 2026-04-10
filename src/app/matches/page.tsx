@@ -266,7 +266,7 @@ export default async function MatchesPage({
 
           return (
             <li key={id}>
-              <article className="overflow-hidden rounded-2xl border border-zinc-300/80 bg-white/90 shadow-[0_10px_24px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-gradient-to-b dark:from-white/[0.06] dark:to-white/[0.02] dark:shadow-lg dark:shadow-black/20">
+              <article className="overflow-hidden rounded-2xl border border-zinc-300/80 bg-white/90 shadow-[0_10px_24px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-zinc-900/55 dark:shadow-lg dark:shadow-black/20">
                 <div className="p-4">
                   <Link
                     href={`/matches/${id}`}

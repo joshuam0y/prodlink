@@ -69,3 +69,24 @@ export async function spendPoints(
   const row = Array.isArray(data) ? data[0] : data;
   return Boolean(row?.applied);
 }
+
+export async function resetPoints(
+  supabase: SupabaseClient,
+  userId: string,
+  reason = "manual_reset",
+): Promise<{ applied: boolean; pointsBalance: number }> {
+  if (!userId) return { applied: false, pointsBalance: 0 };
+  const eventKey = `points_reset:${userId}:${new Date().toISOString()}`;
+  const { data, error } = await supabase.rpc("reset_points", {
+    p_user_id: userId,
+    p_reason: reason,
+    p_event_key: eventKey,
+    p_metadata: { source: "points_page" },
+  });
+  if (error) return { applied: false, pointsBalance: 0 };
+  const row = Array.isArray(data) ? data[0] : data;
+  return {
+    applied: Boolean(row?.applied),
+    pointsBalance: Number(row?.new_points_balance ?? 0),
+  };
+}

@@ -8,6 +8,7 @@ import {
   redeemPointsForOutreachCredits,
   resetOutreachCredits,
 } from "@/lib/outreach-credits";
+import { resetPoints } from "@/lib/points";
 import { isSupabaseConfigured } from "@/lib/env";
 
 export async function redeemOutreachCreditsAction(formData: FormData) {
@@ -64,4 +65,24 @@ export async function resetAllOutreachCreditsAction() {
     redirect("/points?notice=Outreach%20credits%20reset%20to%20zero.");
   }
   redirect("/points?notice=Outreach%20credits%20were%20already%20at%20zero.");
+}
+
+export async function resetAllPointsAction() {
+  if (!isSupabaseConfigured()) redirect("/points?notice=Supabase%20is%20not%20configured.");
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/points");
+
+  const result = await resetPoints(supabase, user.id);
+
+  revalidatePath("/points");
+  revalidatePath("/explore");
+  revalidatePath("/matches");
+  revalidatePath("/");
+  if (result.applied) {
+    redirect("/points?notice=Points%20balance%20reset%20to%20zero.");
+  }
+  redirect("/points?notice=Points%20balance%20was%20already%20zero.");
 }

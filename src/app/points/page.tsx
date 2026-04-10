@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   redeemOutreachCreditsAction,
+  resetAllPointsAction,
   resetAllOutreachCreditsAction,
 } from "@/app/points/actions";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -87,6 +88,23 @@ export default async function PointsPage({
             </form>
           ))}
         </div>
+      </section>
+
+      <section className="mt-6 rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/35">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
+          Points reset
+        </h2>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          Need to fully reset your points for testing? This sets points balance back to zero.
+        </p>
+        <form action={resetAllPointsAction} className="mt-3">
+          <button
+            type="submit"
+            className="rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-900 transition hover:bg-red-500/20 dark:text-red-200 dark:hover:bg-red-500/15"
+          >
+            Reset points balance
+          </button>
+        </form>
       </section>
 
       <section className="mt-6 rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/35">
