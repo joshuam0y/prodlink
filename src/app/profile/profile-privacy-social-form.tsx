@@ -21,7 +21,7 @@ type LinkRow = {
 };
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:placeholder:text-zinc-600";
 
 const selectButtonClass = `${fieldClass} flex items-center justify-between gap-2`;
 
@@ -133,48 +133,48 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
   }
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/35 p-6">
-      <h2 className="text-lg font-semibold text-zinc-100">Public profile &amp; links</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/35">
+      <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Public profile &amp; links</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
         Choose what appears on your public page. Discover may still use your style and prompts for matching.
       </p>
 
       <fieldset className="mt-6 space-y-4">
-        <legend className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+        <legend className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
           Visible on public profile
         </legend>
         {toggles.map(({ key, label, hint }) => (
           <label
             key={key}
-            className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/5 bg-zinc-950/30 px-4 py-3"
+            className="flex cursor-pointer items-start gap-3 rounded-xl border border-zinc-300/80 bg-white/70 px-4 py-3 dark:border-white/5 dark:bg-zinc-950/30"
           >
             <input
               type="checkbox"
-              className="mt-1 h-4 w-4 rounded border-white/20 bg-zinc-900 text-amber-500 focus:ring-amber-500/40"
+              className="mt-1 h-4 w-4 rounded border-zinc-300 bg-white text-amber-500 focus:ring-amber-500/40 dark:border-white/20 dark:bg-zinc-900"
               checked={vis[key]}
               onChange={(e) => setVis((s) => ({ ...s, [key]: e.target.checked }))}
             />
             <span>
-              <span className="font-medium text-zinc-200">{label}</span>
-              <span className="mt-0.5 block text-xs text-zinc-500">{hint}</span>
+              <span className="font-medium text-zinc-800 dark:text-zinc-200">{label}</span>
+              <span className="mt-0.5 block text-xs text-zinc-600 dark:text-zinc-500">{hint}</span>
             </span>
           </label>
         ))}
       </fieldset>
 
       <div className="mt-8">
-        <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">Social &amp; web links</h3>
-        <p className="mt-1 text-sm text-zinc-500">
-          Pick a platform, then paste your <code className="text-zinc-400">https://</code> link. Each platform
+        <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">Social &amp; web links</h3>
+        <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
+          Pick a platform, then paste your <code className="text-zinc-600 dark:text-zinc-300">https://</code> link. Each platform
           can only appear once. For anything else, choose{" "}
-          <strong className="font-medium text-zinc-400">Custom label…</strong> and type a short name.
+          <strong className="font-medium text-zinc-700 dark:text-zinc-300">Custom label…</strong> and type a short name.
         </p>
         <ul className="mt-4 space-y-4">
           {rows.map((row, index) => (
             <li key={index} className="space-y-3">
               <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] sm:items-start">
                 <div className="min-w-0">
-                  <span className="text-xs text-zinc-500">Platform</span>
+                  <span className="text-xs text-zinc-700 dark:text-zinc-400">Platform</span>
                   <div className="mt-1.5">
                     <SocialPlatformSelect
                       value={row.platformId}
@@ -185,7 +185,7 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
                   </div>
                 </div>
                 <div className="min-w-0">
-                  <label className="text-xs text-zinc-500" htmlFor={`social-url-${index}`}>
+                  <label className="text-xs text-zinc-700 dark:text-zinc-400" htmlFor={`social-url-${index}`}>
                     URL
                   </label>
                   <input
@@ -200,7 +200,7 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
                 </div>
                 <button
                   type="button"
-                  className="rounded-xl border border-white/10 px-3 py-2.5 text-sm text-zinc-400 transition hover:bg-white/5 hover:text-zinc-200 sm:mt-6"
+                  className="rounded-xl border border-zinc-300/80 bg-white px-3 py-2.5 text-sm text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-900 sm:mt-6 dark:border-white/10 dark:bg-transparent dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-200"
                   onClick={() => removeLink(index)}
                 >
                   Remove
@@ -208,7 +208,7 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
               </div>
               {row.platformId === "custom" ? (
                 <div>
-                  <label className="text-xs text-zinc-500" htmlFor={`social-custom-${index}`}>
+                  <label className="text-xs text-zinc-700 dark:text-zinc-400" htmlFor={`social-custom-${index}`}>
                     Custom label
                   </label>
                   <input
@@ -241,7 +241,7 @@ export function ProfilePrivacySocialForm({ initialVisibility, initialLinks }: Pr
           type="button"
           disabled={pending}
           onClick={save}
-          className="inline-flex justify-center rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-60"
+          className="inline-flex justify-center rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-60"
         >
           {pending ? "Saving…" : "Save privacy & links"}
         </button>

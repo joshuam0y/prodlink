@@ -135,7 +135,7 @@ export default async function MatchesPage({
   if (!matchIds.length) {
     return (
       <main className="mx-auto w-full max-w-lg flex-1 px-4 py-10 sm:px-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">Messages</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Messages</h1>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-500">
           Mutual matches land here. Once someone likes you back, this becomes your fastest path to
           a real conversation.
@@ -201,7 +201,7 @@ export default async function MatchesPage({
   return (
     <main className="mx-auto w-full max-w-lg flex-1 px-4 pb-12 pt-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">Messages</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Messages</h1>
         <p className="mt-1 text-sm text-zinc-500">
           Chats with your mutual matches.
         </p>

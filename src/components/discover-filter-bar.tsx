@@ -141,7 +141,7 @@ export function DiscoverFilterBar({
               step={1}
               value={draftKm}
               onChange={(e) => setDraftKm(Number(e.target.value))}
-              className="mt-3 w-full accent-[var(--accent)]"
+              className="mt-3 w-full accent-amber-500"
               aria-label="Distance radius"
             />
           </div>

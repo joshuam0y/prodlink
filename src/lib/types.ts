@@ -65,6 +65,7 @@ export type DbProfile = {
   id: string;
   created_at?: string | null;
   display_name: string | null;
+  pronouns?: string | null;
   avatar_url?: string | null;
   ai_summary?: string | null;
   ai_tags?: unknown;

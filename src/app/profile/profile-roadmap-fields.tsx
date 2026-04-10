@@ -10,7 +10,7 @@ import {
 import { updateProfileBasics } from "./actions";
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:placeholder:text-zinc-600";
 
 const SECONDARY_OPTIONS = [
   "",
@@ -53,9 +53,9 @@ export function ProfileRoadmapFields({ primaryRole, initialSecondaryRole, initia
   if (!showDual && !showSc && !showBeta) return null;
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-      <h2 className="text-sm font-semibold text-zinc-100">Roadmap profile options</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/40">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Roadmap profile options</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
         Optional fields tied to upcoming prodLink features (toggle via env in production).
       </p>
 
@@ -68,7 +68,7 @@ export function ProfileRoadmapFields({ primaryRole, initialSecondaryRole, initia
 
       {showDual ? (
         <div className="mt-5">
-          <label htmlFor="secondary_role" className="text-xs font-medium text-zinc-500">
+          <label htmlFor="secondary_role" className="text-xs font-medium text-zinc-700 dark:text-zinc-400">
             Second role (optional)
           </label>
           <select
@@ -83,7 +83,7 @@ export function ProfileRoadmapFields({ primaryRole, initialSecondaryRole, initia
               </option>
             ))}
           </select>
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-500">
             Shown as &quot;{primaryRole} · …&quot; on discover when different from your primary role.
           </p>
         </div>
@@ -91,7 +91,7 @@ export function ProfileRoadmapFields({ primaryRole, initialSecondaryRole, initia
 
       {showSc ? (
         <div className={showDual ? "mt-5" : "mt-5"}>
-          <label htmlFor="soundcloud_url" className="text-xs font-medium text-zinc-500">
+          <label htmlFor="soundcloud_url" className="text-xs font-medium text-zinc-700 dark:text-zinc-400">
             SoundCloud profile URL (optional)
           </label>
           <input
@@ -103,7 +103,7 @@ export function ProfileRoadmapFields({ primaryRole, initialSecondaryRole, initia
             onChange={(e) => setSoundcloud(e.target.value)}
             className={fieldClass}
           />
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-500">
             HTTPS link to your SoundCloud — used for future verification flows.
           </p>
         </div>
@@ -148,7 +148,7 @@ export function ProfileRoadmapFields({ primaryRole, initialSecondaryRole, initia
               router.refresh();
             });
           }}
-          className="mt-5 rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40"
+          className="mt-5 rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40"
         >
           {pending ? "Saving…" : "Save roadmap fields"}
         </button>

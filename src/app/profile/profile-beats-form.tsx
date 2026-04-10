@@ -22,7 +22,7 @@ type ExtraSlot = {
 };
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500/20 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-amber-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 file:mr-2.5 file:rounded-lg file:border-0 file:bg-amber-100 file:px-2.5 file:py-1 file:text-xs file:font-semibold file:text-amber-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:file:bg-amber-500/20 dark:file:text-amber-200 dark:placeholder:text-zinc-600";
 
 function extFromFile(file: File): string {
   const byName = file.name.split(".").pop()?.toLowerCase();
@@ -206,9 +206,9 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
   }
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-      <h2 className="text-sm font-semibold text-zinc-100">Discover previews</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/40">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Discover previews</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
         Upload your star track and up to five more clips. Files go to your private folder in
         Supabase Storage (bucket <code className="text-zinc-400">profile-media</code>).
       </p>
@@ -227,20 +227,20 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
 
       <div className="mt-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
             Star track
           </h3>
           {(starAudioUrl || starAudioFile) && (
             <button
               type="button"
               onClick={clearStar}
-              className="text-xs text-zinc-500 underline decoration-zinc-600 hover:text-zinc-300"
+              className="text-xs text-zinc-700 underline decoration-zinc-500 hover:text-zinc-900 dark:text-zinc-500 dark:decoration-zinc-600 dark:hover:text-zinc-300"
             >
               Remove star track
             </button>
           )}
         </div>
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Title
           <input
             type="text"
@@ -250,7 +250,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
             className={fieldClass}
           />
         </label>
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Audio file (mp3, wav, m4a…)
           <input
             type="file"
@@ -260,14 +260,14 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
           />
         </label>
         {starAudioUrl && !starAudioFile ? (
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-zinc-600 dark:text-zinc-500">
             Current:{" "}
             <a href={starAudioUrl} className="text-amber-500/90 hover:underline" target="_blank" rel="noreferrer">
               open link
             </a>
           </p>
         ) : null}
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Cover image (optional)
           <input
             type="file"
@@ -277,7 +277,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
           />
         </label>
         {starCoverUrl && !starCoverFile ? (
-          <p className="text-xs text-zinc-600">
+          <p className="text-xs text-zinc-600 dark:text-zinc-500">
             Current cover:{" "}
             <a href={starCoverUrl} className="text-amber-500/90 hover:underline" target="_blank" rel="noreferrer">
               open
@@ -288,21 +288,21 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
 
       <div className="mt-10 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
             More beats (max 5)
           </h3>
           <button
             type="button"
             onClick={addSlot}
             disabled={slots.length >= 5 || pending}
-            className="rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-zinc-300 transition hover:bg-white/5 disabled:opacity-30"
+            className="rounded-full border border-zinc-300/80 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-30 dark:border-white/15 dark:bg-transparent dark:text-zinc-300 dark:hover:bg-white/5"
           >
             Add beat
           </button>
         </div>
 
         {slots.length === 0 ? (
-          <p className="text-sm text-zinc-600">No extra beats yet.</p>
+          <p className="text-sm text-zinc-700 dark:text-zinc-500">No extra beats yet.</p>
         ) : (
           <ul className="space-y-6">
             {slots.map((s, i) => (
@@ -319,7 +319,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
                     Remove
                   </button>
                 </div>
-                <label className="block text-xs font-medium text-zinc-500">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
                   Title
                   <input
                     type="text"
@@ -328,7 +328,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
                     className={fieldClass}
                   />
                 </label>
-                <label className="block text-xs font-medium text-zinc-500">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
                   Audio
                   <input
                     type="file"
@@ -340,7 +340,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
                   />
                 </label>
                 {s.audioUrl && !s.audioFile ? (
-                  <p className="mt-1 text-xs text-zinc-600">
+                  <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-500">
                     Current:{" "}
                     <a
                       href={s.audioUrl}
@@ -352,7 +352,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
                     </a>
                   </p>
                 ) : null}
-                <label className="block text-xs font-medium text-zinc-500">
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
                   Cover (optional)
                   <input
                     type="file"
@@ -373,7 +373,7 @@ export function ProfileBeatsForm({ initial }: { initial: ProfileBeatsInitial }) 
         type="button"
         disabled={pending}
         onClick={save}
-        className="mt-8 w-full rounded-full bg-amber-500 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40 sm:w-auto sm:px-8"
+        className="mt-8 w-full rounded-full bg-amber-500 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40 sm:w-auto sm:px-8"
       >
         {pending ? "Saving…" : "Save previews"}
       </button>

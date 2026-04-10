@@ -927,7 +927,7 @@ export function MatchThreadClient({
             void sendMessage();
           }}
           onBlur={() => sendTyping(false)}
-          className="w-full resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-0"
+          className="w-full resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:outline-none focus:ring-0 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           placeholder={`Message ${matchName}...`}
         />
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-zinc-200/90 px-2 pb-1 pt-2 dark:border-white/5">

@@ -129,7 +129,7 @@ export default async function MatchConversationPage({ params, searchParams }: Pr
               ringClassName="bg-gradient-to-br from-amber-500/35 to-amber-700/25"
             />
             <div className="min-w-0">
-              <h1 className="truncate text-base font-semibold text-zinc-50">{name}</h1>
+              <h1 className="truncate text-base font-semibold text-zinc-900 dark:text-zinc-50">{name}</h1>
               <p className="truncate text-xs text-zinc-600 dark:text-zinc-500">
                 {[profile.role?.trim(), profile.city?.trim(), profile.niche?.trim()].filter(Boolean).join(" · ") || "Tap for full profile"}
               </p>

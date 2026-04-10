@@ -22,7 +22,7 @@ type Props = {
 };
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:placeholder:text-zinc-600";
 
 function MapFlyTo({
   lat,
@@ -188,9 +188,9 @@ export function ProfileLocationForm({ initial }: Props) {
   const hasPin = lat !== null && lng !== null;
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-      <h2 className="text-sm font-semibold text-zinc-100">Location</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/40">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Location</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">
         Search a place, tap the map to drop your pin, or drag the pin. We&apos;ll suggest city and
         neighborhood from the pin (you can edit).
       </p>
@@ -201,7 +201,7 @@ export function ProfileLocationForm({ initial }: Props) {
       ) : null}
 
       <div className="relative mt-6">
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Search area
           <input
             type="text"
@@ -247,7 +247,7 @@ export function ProfileLocationForm({ initial }: Props) {
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           City
           <input
             type="text"
@@ -257,7 +257,7 @@ export function ProfileLocationForm({ initial }: Props) {
             className={fieldClass}
           />
         </label>
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Neighborhood
           <input
             type="text"
@@ -270,7 +270,7 @@ export function ProfileLocationForm({ initial }: Props) {
       </div>
 
       <div className="mt-6">
-        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+        <p className="text-xs font-medium uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
           Match distance: {radiusKm} km
         </p>
         <input
@@ -280,7 +280,7 @@ export function ProfileLocationForm({ initial }: Props) {
           step={1}
           value={radiusKm}
           onChange={(e) => setRadiusKm(Number(e.target.value))}
-          className="mt-2 w-full"
+          className="mt-2 w-full accent-amber-500"
         />
       </div>
 
@@ -326,10 +326,10 @@ export function ProfileLocationForm({ initial }: Props) {
           <div className="h-72 bg-zinc-900/40" />
         )}
       </div>
-      <p className="mt-2 text-xs text-zinc-500">
+      <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-500">
         Pin: {lat?.toFixed(5) ?? "—"}, {lng?.toFixed(5) ?? "—"}
       </p>
-      <p className="mt-1 text-[11px] text-zinc-600">
+      <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-500">
         Search &amp; map data: OpenStreetMap / Nominatim. Don&apos;t abuse — for personal profile
         use only.
       </p>
@@ -348,7 +348,7 @@ export function ProfileLocationForm({ initial }: Props) {
               scheduleReverse(la, lo);
             });
           }}
-          className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:bg-white/5"
+          className="rounded-full border border-zinc-300/80 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-white/15 dark:bg-transparent dark:text-zinc-300 dark:hover:bg-white/5"
         >
           Use current location
         </button>
@@ -359,7 +359,7 @@ export function ProfileLocationForm({ initial }: Props) {
             if (lat === null || lng === null) return;
             void fetchReverse(lat, lng);
           }}
-          className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:bg-white/5 disabled:opacity-40"
+          className="rounded-full border border-zinc-300/80 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-40 dark:border-white/15 dark:bg-transparent dark:text-zinc-300 dark:hover:bg-white/5"
         >
           Refresh labels from pin
         </button>
@@ -385,7 +385,7 @@ export function ProfileLocationForm({ initial }: Props) {
             setSearchHits([]);
             setSearchOpen(false);
           }}
-          className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:bg-white/5 disabled:opacity-40"
+          className="rounded-full border border-zinc-300/80 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-40 dark:border-white/15 dark:bg-transparent dark:text-zinc-300 dark:hover:bg-white/5"
         >
           Reset unsaved changes
         </button>

@@ -122,7 +122,7 @@ export function ProfileAvatarForm({ initialUrl }: { initialUrl: string }) {
                     router.refresh();
                   });
                 }}
-                className="rounded-full border border-white/15 px-3.5 py-1.5 text-sm font-medium text-zinc-300 transition hover:bg-white/5 disabled:opacity-40"
+                className="rounded-full border border-zinc-300/80 bg-white px-3.5 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-40 dark:border-white/15 dark:bg-transparent dark:text-zinc-300 dark:hover:bg-white/5"
               >
                 Remove photo
               </button>

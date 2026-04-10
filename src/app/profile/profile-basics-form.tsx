@@ -15,6 +15,7 @@ import { generateProfileBasicsSuggestions, updateProfileBasics } from "./actions
 type Props = {
   initial: {
     displayName: string;
+    pronouns: string;
     role: string;
     niche: string;
     goal: string;
@@ -28,12 +29,13 @@ type Props = {
 };
 
 const fieldClass =
-  "mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/30";
+  "mt-1 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-amber-500/60 focus:outline-none focus:ring-1 focus:ring-amber-500/30 dark:border-white/10 dark:bg-zinc-900/50 dark:text-zinc-200 dark:placeholder:text-zinc-600";
 
 export function ProfileBasicsForm({ initial }: Props) {
   const [pending, startTransition] = useTransition();
   const [aiPending, startAiTransition] = useTransition();
   const [displayName, setDisplayName] = useState(initial.displayName);
+  const [pronouns, setPronouns] = useState(initial.pronouns);
   const [niche, setNiche] = useState(initial.niche);
   const [goal, setGoal] = useState(initial.goal);
   const [lookingFor, setLookingFor] = useState(initial.lookingFor);
@@ -92,10 +94,10 @@ export function ProfileBasicsForm({ initial }: Props) {
   }
 
   return (
-    <section className="mt-10 rounded-2xl border border-white/10 bg-zinc-900/40 p-6">
-      <h2 className="text-sm font-semibold text-zinc-100">Quick profile edits</h2>
-      <p className="mt-1 text-sm text-zinc-500">Change only what you want and save.</p>
-      <p className="mt-1 text-xs text-zinc-600">
+    <section className="mt-8 rounded-2xl border border-zinc-300 bg-white/85 p-5 sm:p-6 dark:border-white/10 dark:bg-zinc-900/40">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Quick profile edits</h2>
+      <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-400">Change only what you want and save.</p>
+      <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-500">
         Update city, neighborhood, and pin in the Location section below.
       </p>
       {message ? (
@@ -104,13 +106,23 @@ export function ProfileBasicsForm({ initial }: Props) {
         </p>
       ) : null}
       <div className="mt-6">
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Display name
           <input className={fieldClass} value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
         </label>
       </div>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
+          Pronouns (optional)
+          <input
+            className={fieldClass}
+            value={pronouns}
+            onChange={(e) => setPronouns(e.target.value)}
+            placeholder="e.g. she/her, he/him, they/them"
+            maxLength={40}
+          />
+        </label>
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           {isVenue ? "Room vibe" : "Style"}
           <input
             className={fieldClass}
@@ -123,7 +135,7 @@ export function ProfileBasicsForm({ initial }: Props) {
             }
           />
         </label>
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           Goal
           <input
             className={fieldClass}
@@ -138,7 +150,7 @@ export function ProfileBasicsForm({ initial }: Props) {
         </label>
       </div>
       <div className="mt-4">
-        <label className="block text-xs font-medium text-zinc-500">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
           {isVenue ? "Looking for artists who..." : "Looking for"}
           <input
             className={fieldClass}
@@ -152,26 +164,26 @@ export function ProfileBasicsForm({ initial }: Props) {
           />
         </label>
       </div>
-      <div className="mt-6 rounded-xl border border-white/10 bg-zinc-950/30 p-4">
+      <div className="mt-6 rounded-xl border border-zinc-300/80 bg-white/70 p-4 dark:border-white/10 dark:bg-zinc-950/30">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-500">
               {promptHeading}
             </p>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-500">
               {promptSubheading}
             </p>
           </div>
         </div>
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <p className="text-xs font-medium text-zinc-400">Try one of these prompt ideas</p>
+        <div className="mt-4 rounded-xl border border-zinc-300/80 bg-white/85 p-3 dark:border-white/10 dark:bg-white/[0.03]">
+          <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Try one of these prompt ideas</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {suggestedPromptOptions.map((option, index) => (
               <button
                 key={option.question}
                 type="button"
                 onClick={() => applyPrompt(index % 2 === 0 ? 1 : 2, option.question)}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-zinc-300 transition hover:bg-white/[0.08]"
+                className="rounded-full border border-zinc-300/80 bg-zinc-100 px-3 py-1.5 text-xs text-zinc-700 transition hover:bg-zinc-200 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.08]"
               >
                 {option.question}
               </button>
@@ -179,7 +191,7 @@ export function ProfileBasicsForm({ initial }: Props) {
           </div>
         </div>
         <div className="mt-3 grid gap-3">
-          <label className="block text-xs font-medium text-zinc-500">
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
             Prompt 1 question
             <select
               className={fieldClass}
@@ -195,12 +207,12 @@ export function ProfileBasicsForm({ initial }: Props) {
             </select>
           </label>
           {prompt1Q ? (
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-600 dark:text-zinc-500">
               {promptOptions.find((option) => option.question === prompt1Q)?.cue ||
                 "Answer this in a way that gives someone an easy opener."}
             </p>
           ) : null}
-          <label className="block text-xs font-medium text-zinc-500">
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
             Prompt 1 answer
             <textarea
               className={fieldClass}
@@ -214,7 +226,7 @@ export function ProfileBasicsForm({ initial }: Props) {
               }
             />
           </label>
-          <label className="block text-xs font-medium text-zinc-500">
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
             Prompt 2 question
             <select
               className={fieldClass}
@@ -232,12 +244,12 @@ export function ProfileBasicsForm({ initial }: Props) {
             </select>
           </label>
           {prompt2Q ? (
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-600 dark:text-zinc-500">
               {promptOptions.find((option) => option.question === prompt2Q)?.cue ||
                 "Keep it specific enough that someone could reply to it."}
             </p>
           ) : null}
-          <label className="block text-xs font-medium text-zinc-500">
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-400">
             Prompt 2 answer
             <textarea
               className={fieldClass}
@@ -268,8 +280,8 @@ export function ProfileBasicsForm({ initial }: Props) {
       <div className="mt-6 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-sm font-semibold text-zinc-100">Profile coach</p>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Profile coach</p>
+            <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-500">
               {isVenue
                 ? "Get sharper feedback on whether your room, booking taste, and outreach expectations feel clear."
                 : "Get sharper feedback on clarity, tone, and whether your profile feels worth replying to."}
@@ -315,7 +327,7 @@ export function ProfileBasicsForm({ initial }: Props) {
                 setMessage("Suggestions applied locally. Review, then save changes.");
               })
             }
-            className="rounded-full border border-amber-500/35 bg-amber-500/15 px-4 py-2 text-sm font-medium text-amber-200 transition hover:bg-amber-500/20 disabled:opacity-40"
+            className="rounded-full border border-amber-500/35 bg-amber-500/15 px-4 py-1.5 text-sm font-medium text-amber-200 transition hover:bg-amber-500/20 disabled:opacity-40"
           >
             {aiPending ? "Thinking..." : "Improve profile"}
           </button>
@@ -393,6 +405,7 @@ export function ProfileBasicsForm({ initial }: Props) {
             }
             const result = await updateProfileBasics({
               display_name: displayName,
+              pronouns,
               niche,
               goal,
               looking_for: lookingFor,
@@ -404,7 +417,7 @@ export function ProfileBasicsForm({ initial }: Props) {
             setMessage(result.ok ? "Profile updated." : result.error);
           })
         }
-        className="mt-6 rounded-full bg-amber-500 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40"
+        className="mt-6 rounded-full bg-amber-500 px-6 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-amber-400 disabled:opacity-40"
       >
         {pending ? "Saving..." : "Save changes"}
       </button>

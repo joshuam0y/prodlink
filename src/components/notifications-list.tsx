@@ -51,6 +51,31 @@ export function NotificationsList({ notifications }: Props) {
     }
   };
 
+  const deleteNotification = async (id: number) => {
+    let removedUnread = false;
+    let removed: NotificationRow | null = null;
+    setItems((prev) => {
+      const target = prev.find((item) => item.id === id) ?? null;
+      removed = target;
+      removedUnread = Boolean(target && target.read_at === null);
+      return prev.filter((item) => item.id !== id);
+    });
+    try {
+      const res = await fetch(`/api/notifications/${id}`, { method: "DELETE" });
+      if (!res.ok && removed) {
+        setItems((prev) => [removed as NotificationRow, ...prev]);
+        return;
+      }
+      if (removedUnread && typeof window !== "undefined") {
+        window.dispatchEvent(new Event("prodlink:unread-counts-refresh"));
+      }
+    } catch {
+      if (removed) {
+        setItems((prev) => [removed as NotificationRow, ...prev]);
+      }
+    }
+  };
+
   return (
     <ul className="space-y-3">
       {items.map((n) => {
@@ -100,6 +125,17 @@ export function NotificationsList({ notifications }: Props) {
                     Mark read
                   </button>
                 ) : null}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    void deleteNotification(n.id);
+                  }}
+                  className="rounded-full border border-white/15 px-2.5 py-1 text-[11px] font-medium text-zinc-200 transition hover:bg-white/5"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>

@@ -354,6 +354,7 @@ export async function updateProfileLocation(
 export type UpdateProfileBasicsPayload = {
   display_name?: string;
   avatar_url?: string | null;
+  pronouns?: string | null;
   niche?: string;
   goal?: string;
   city?: string;
@@ -381,6 +382,10 @@ export async function updateProfileBasics(
   const patch: Record<string, string | null> = {};
   if (typeof payload.display_name === "string") patch.display_name = payload.display_name.trim();
   if (typeof payload.avatar_url === "string") patch.avatar_url = payload.avatar_url.trim() || null;
+  if ("pronouns" in payload) {
+    const raw = typeof payload.pronouns === "string" ? payload.pronouns.trim() : "";
+    patch.pronouns = raw || null;
+  }
   if (typeof payload.niche === "string") patch.niche = payload.niche.trim();
   if (typeof payload.goal === "string") patch.goal = payload.goal.trim();
   if (typeof payload.city === "string") patch.city = payload.city.trim();

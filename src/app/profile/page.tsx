@@ -35,7 +35,7 @@ export default async function ProfilePage() {
   const { data: row, error } = await supabase
     .from("profiles")
     .select(
-      "id, created_at, display_name, avatar_url, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, location_radius_km, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, last_seen_at, updated_at, gallery_image_urls, soundcloud_url, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
+      "id, created_at, display_name, pronouns, avatar_url, ai_summary, ai_tags, ai_profile_score, role, secondary_role, niche, goal, city, neighborhood, latitude, longitude, location_radius_km, looking_for, prompt_1_question, prompt_1_answer, prompt_2_question, prompt_2_answer, onboarding_completed_at, last_seen_at, updated_at, gallery_image_urls, soundcloud_url, star_beat_title, star_beat_audio_url, star_beat_cover_url, extra_beats, public_visibility, social_links",
     )
     .eq("id", user.id)
     .maybeSingle();
@@ -246,6 +246,7 @@ export default async function ProfilePage() {
       <ProfileBasicsForm
         initial={{
           displayName: profile?.display_name?.trim() ?? "",
+          pronouns: profile?.pronouns?.trim() ?? "",
           role: profile?.role?.trim() ?? "",
           niche: profile?.niche?.trim() ?? "",
           goal: profile?.goal?.trim() ?? "",

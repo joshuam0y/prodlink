@@ -36,7 +36,7 @@ export function DistanceFilter({ initialKm }: { initialKm: number }) {
   }, [km, baseParams, pathname, router]);
 
   return (
-    <div className="mx-auto mt-5 max-w-md rounded-xl border border-white/10 bg-zinc-900/40 p-3 text-left">
+    <div className="mx-auto mt-5 max-w-md rounded-xl border border-zinc-300/80 bg-white/90 p-3 text-left dark:border-white/15 dark:bg-zinc-900/40">
       <div className="flex items-center justify-between text-xs text-zinc-400">
         <span>Distance radius</span>
         <span className="tabular-nums">{km} km</span>
@@ -48,7 +48,7 @@ export function DistanceFilter({ initialKm }: { initialKm: number }) {
         step={1}
         value={km}
         onChange={(e) => setKm(Number(e.target.value))}
-        className="mt-2 w-full"
+        className="mt-2 w-full accent-amber-500"
         aria-label="Distance radius"
       />
       <p className="mt-1 text-[11px] text-zinc-500">
