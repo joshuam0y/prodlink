@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  redeemOutreachCreditsAction,
+  redeemSwipeCreditsAction,
   resetAllPointsAction,
-  resetAllOutreachCreditsAction,
+  resetAllSwipeCreditsAction,
 } from "@/app/points/actions";
 import { isSupabaseConfigured } from "@/lib/env";
-import { getOutreachCreditsBalance, OUTREACH_REDEEM_OPTIONS } from "@/lib/outreach-credits";
+import { getSwipeCreditsBalance, SWIPE_CREDIT_REDEEM_OPTIONS } from "@/lib/outreach-credits";
 import { getPointsBalance } from "@/lib/points";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Points and credits",
-  description: "Redeem engagement points for outreach credits.",
+  description: "Redeem engagement points for extra swipe credits.",
 };
 
 export default async function PointsPage({
@@ -30,16 +30,16 @@ export default async function PointsPage({
 
   const params = await searchParams;
   const notice = params.notice ? decodeURIComponent(params.notice) : null;
-  const [pointsBalance, outreachCredits] = await Promise.all([
+  const [pointsBalance, swipeCredits] = await Promise.all([
     getPointsBalance(supabase, user.id),
-    getOutreachCreditsBalance(supabase, user.id),
+    getSwipeCreditsBalance(supabase, user.id),
   ]);
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Points and outreach credits</h1>
+      <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Points and swipe credits</h1>
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        Earn points from activity, then redeem them into outreach credits you can use for lead-gen access.
+        Earn points from activity, then redeem them into swipe credits to keep liking after the daily cap.
       </p>
       {notice ? (
         <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-900 dark:text-amber-100">
@@ -53,8 +53,8 @@ export default async function PointsPage({
           <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{pointsBalance}</p>
         </div>
         <div className="rounded-2xl border border-zinc-300/80 bg-white/90 p-4 dark:border-white/10 dark:bg-zinc-900/35">
-          <p className="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-500">Outreach credits</p>
-          <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{outreachCredits}</p>
+          <p className="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-500">Swipe credits</p>
+          <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{swipeCredits}</p>
         </div>
       </section>
 
@@ -63,17 +63,17 @@ export default async function PointsPage({
           Redeem options
         </h2>
         <div className="mt-3 space-y-3">
-          {OUTREACH_REDEEM_OPTIONS.map((opt) => (
+          {SWIPE_CREDIT_REDEEM_OPTIONS.map((opt) => (
             <form
               key={`${opt.points}-${opt.credits}`}
-              action={redeemOutreachCreditsAction}
+              action={redeemSwipeCreditsAction}
               className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white px-3 py-3 dark:border-white/10 dark:bg-zinc-950/25"
             >
               <input type="hidden" name="option" value={`${opt.points}:${opt.credits}`} />
               <p className="text-sm text-zinc-700 dark:text-zinc-300">
                 <span className="font-semibold text-zinc-900 dark:text-zinc-100">{opt.points} points</span>
                 {" -> "}
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100">{opt.credits} outreach credits</span>
+                <span className="font-semibold text-zinc-900 dark:text-zinc-100">{opt.credits} swipe credits</span>
                 <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
                   (limit {opt.maxPerDay}/day)
                 </span>
@@ -112,14 +112,14 @@ export default async function PointsPage({
           Credits reset
         </h2>
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          Need a clean slate for testing? Reset your outreach credits back to zero.
+          Need a clean slate for testing? Reset your swipe credits back to zero.
         </p>
-        <form action={resetAllOutreachCreditsAction} className="mt-3">
+        <form action={resetAllSwipeCreditsAction} className="mt-3">
           <button
             type="submit"
             className="rounded-full border border-red-500/35 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-900 transition hover:bg-red-500/20 dark:text-red-200 dark:hover:bg-red-500/15"
           >
-            Reset all outreach credits
+            Reset all swipe credits
           </button>
         </form>
       </section>
@@ -131,8 +131,8 @@ export default async function PointsPage({
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-zinc-600 dark:text-zinc-400">
           <li>Points are earned from real engagement actions.</li>
           <li>Daily like limits apply; passes do not consume like allowance.</li>
-          <li>Redeeming converts points into outreach credits.</li>
-          <li>Credits are your spendable balance for future outreach features.</li>
+          <li>Redeeming converts points into swipe credits.</li>
+          <li>When you hit the daily like cap, each extra like spends 1 swipe credit.</li>
         </ul>
       </section>
 

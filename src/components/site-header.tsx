@@ -57,7 +57,7 @@ type Props = {
   unreadMessages?: number;
   unreadNotifications?: number;
   pointsBalance?: number;
-  outreachCreditsBalance?: number;
+  swipeCreditsBalance?: number;
   /** When false, hide the Profile → onboarding link (user finished questionnaire). */
   showBuildProfileNav?: boolean;
 };
@@ -70,7 +70,7 @@ export function SiteHeader({
   unreadMessages = 0,
   unreadNotifications = 0,
   pointsBalance: _pointsBalance = 0,
-  outreachCreditsBalance = 0,
+  swipeCreditsBalance = 0,
   showBuildProfileNav = true,
 }: Props) {
   const { theme } = useThemeSetting();
@@ -320,7 +320,7 @@ export function SiteHeader({
               </p>
               <p className="mt-0.5 text-base font-semibold text-zinc-100">{_pointsBalance}</p>
               <p className="mt-0.5 text-[11px] text-zinc-400">
-                Outreach credits: {outreachCreditsBalance}
+                Swipe credits: {swipeCreditsBalance}
               </p>
             </Link>
           ) : null}

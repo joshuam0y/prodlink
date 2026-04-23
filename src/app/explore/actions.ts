@@ -6,6 +6,7 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { trackServerEvent } from "@/lib/analytics";
 import { createNotification } from "@/lib/notifications";
 import { awardPoints, POINT_VALUES, spendPoints } from "@/lib/points";
+import { spendSwipeCredits } from "@/lib/outreach-credits";
 import { isUuid } from "@/lib/uuid";
 
 export type DiscoverAction = "pass" | "save";
@@ -26,6 +27,24 @@ async function hasReachedDailyLikeLimit(
     .in("action", ["save", "interested"])
     .gte("created_at", dayStartIso);
   return (count ?? 0) >= DAILY_LIKE_LIMIT;
+}
+
+async function consumeSwipeCreditIfLimitReached(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  targetId: string,
+): Promise<boolean> {
+  const limitReached = await hasReachedDailyLikeLimit(supabase, userId);
+  if (!limitReached) return true;
+  const consume = await spendSwipeCredits(
+    supabase,
+    userId,
+    1,
+    "extra_swipe_used",
+    `extra_swipe:${userId}:${targetId}:${new Date().toISOString()}`,
+    { source: "discover_like_cap", targetId },
+  );
+  return consume.applied;
 }
 
 async function getActorName(
@@ -167,8 +186,8 @@ export async function recordDiscoverAction(
   const beforeAction = beforeRow?.action as string | undefined;
   const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
   if (action === "save" && !hadLikeBefore) {
-    const limitReached = await hasReachedDailyLikeLimit(supabase, user.id);
-    if (limitReached) return { ok: false };
+    const canProceed = await consumeSwipeCreditIfLimitReached(supabase, user.id, targetId);
+    if (!canProceed) return { ok: false };
   }
 
   const { data: reciprocalBefore } = await supabase
@@ -262,8 +281,8 @@ export async function setDiscoverAction(
   const beforeAction = beforeRow?.action as string | undefined;
   const hadLikeBefore = beforeAction === "save" || beforeAction === "interested";
   if (action === "save" && !hadLikeBefore) {
-    const limitReached = await hasReachedDailyLikeLimit(supabase, user.id);
-    if (limitReached) return { ok: false };
+    const canProceed = await consumeSwipeCreditIfLimitReached(supabase, user.id, targetId);
+    if (!canProceed) return { ok: false };
   }
   const { data: reciprocalBefore } = await supabase
     .from("discover_swipes")

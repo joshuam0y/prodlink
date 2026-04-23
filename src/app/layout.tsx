@@ -10,7 +10,7 @@ import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { isAdminEmail, isSupabaseConfigured } from "@/lib/env";
 import { getPointsBalance } from "@/lib/points";
-import { getOutreachCreditsBalance } from "@/lib/outreach-credits";
+import { getSwipeCreditsBalance } from "@/lib/outreach-credits";
 import { getSiteUrl } from "@/lib/site-url";
 import { isProfileQuestionnaireComplete } from "@/lib/profile-completion";
 import { createClient } from "@/lib/supabase/server";
@@ -69,7 +69,7 @@ export default async function RootLayout({
   let unreadNotifications = 0;
   let pointsBalance = 0;
   let isAdmin = false;
-  let outreachCreditsBalance = 0;
+  let swipeCreditsBalance = 0;
   const supabaseEnabled = isSupabaseConfigured();
 
   if (supabaseEnabled) {
@@ -105,7 +105,7 @@ export default async function RootLayout({
           unreadNotifications = 0;
         }
         pointsBalance = await getPointsBalance(supabase, user.id);
-        outreachCreditsBalance = await getOutreachCreditsBalance(supabase, user.id);
+        swipeCreditsBalance = await getSwipeCreditsBalance(supabase, user.id);
       }
     } catch {
       user = null;
@@ -113,7 +113,7 @@ export default async function RootLayout({
       unreadMessages = 0;
       unreadNotifications = 0;
       pointsBalance = 0;
-      outreachCreditsBalance = 0;
+      swipeCreditsBalance = 0;
       isAdmin = false;
     }
   }
@@ -142,7 +142,7 @@ export default async function RootLayout({
               unreadMessages={unreadMessages}
               unreadNotifications={unreadNotifications}
               pointsBalance={pointsBalance}
-              outreachCreditsBalance={outreachCreditsBalance}
+              swipeCreditsBalance={swipeCreditsBalance}
               showBuildProfileNav={showBuildProfileNav}
             />
             <div className="flex min-w-0 flex-1 flex-col pb-24 md:pb-0">

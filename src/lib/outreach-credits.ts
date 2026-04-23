@@ -8,13 +8,13 @@ type JsonValue =
   | { [key: string]: JsonValue }
   | JsonValue[];
 
-export const OUTREACH_REDEEM_OPTIONS = [
+export const SWIPE_CREDIT_REDEEM_OPTIONS = [
   { points: 50, credits: 1, maxPerDay: 5 },
   { points: 120, credits: 3, maxPerDay: 3 },
   { points: 350, credits: 10, maxPerDay: 1 },
 ] as const;
 
-export async function getOutreachCreditsBalance(
+export async function getSwipeCreditsBalance(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<number> {
@@ -27,7 +27,7 @@ export async function getOutreachCreditsBalance(
   return Number(data?.balance ?? 0);
 }
 
-export async function redeemPointsForOutreachCredits(
+export async function redeemPointsForSwipeCredits(
   supabase: SupabaseClient,
   userId: string,
   pointsToSpend: number,
@@ -56,7 +56,7 @@ export async function redeemPointsForOutreachCredits(
   };
 }
 
-export async function spendOutreachCredits(
+export async function spendSwipeCredits(
   supabase: SupabaseClient,
   userId: string,
   credits: number,
@@ -82,7 +82,7 @@ export async function spendOutreachCredits(
   };
 }
 
-export async function resetOutreachCredits(
+export async function resetSwipeCredits(
   supabase: SupabaseClient,
   userId: string,
   reason = "manual_reset",
@@ -102,3 +102,10 @@ export async function resetOutreachCredits(
     creditsBalance: Number(row?.new_credit_balance ?? 0),
   };
 }
+
+// Backward-compatible aliases while callers migrate naming.
+export const OUTREACH_REDEEM_OPTIONS = SWIPE_CREDIT_REDEEM_OPTIONS;
+export const getOutreachCreditsBalance = getSwipeCreditsBalance;
+export const redeemPointsForOutreachCredits = redeemPointsForSwipeCredits;
+export const spendOutreachCredits = spendSwipeCredits;
+export const resetOutreachCredits = resetSwipeCredits;
