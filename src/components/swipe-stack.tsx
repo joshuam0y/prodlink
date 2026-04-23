@@ -196,7 +196,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
         /* autoplay blocked until gesture */
       });
     };
-    if (gestureStarted.current) tryPlay();
+    tryPlay();
 
     let removeCap: (() => void) | undefined;
     if (isCardAudioPreviewCapEnabled()) {
@@ -629,7 +629,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
         onPointerUp={onPointerEnd}
         onPointerCancel={onPointerEnd}
         style={dragTransform}
-        className={`relative z-10 min-h-[420px] sm:min-h-[500px] touch-pan-y overflow-hidden rounded-[30px] border border-zinc-300/80 bg-[#f2efe9] text-zinc-900 shadow-[0_24px_70px_rgba(0,0,0,0.1)] select-none dark:border-white/10 dark:bg-zinc-900/60 dark:text-zinc-50 dark:shadow-[0_30px_100px_rgba(0,0,0,0.3)] ${
+        className={`relative z-10 h-[min(74dvh,660px)] min-h-[420px] sm:min-h-[500px] sm:h-auto touch-pan-y overflow-hidden rounded-[30px] border border-zinc-300/80 bg-[#f2efe9] text-zinc-900 shadow-[0_24px_70px_rgba(0,0,0,0.1)] select-none dark:border-white/10 dark:bg-zinc-900/60 dark:text-zinc-50 dark:shadow-[0_30px_100px_rgba(0,0,0,0.3)] ${
           dragging && !exitDir ? "cursor-grabbing" : "cursor-grab"
         } ${
           dragging && !exitDir
@@ -731,7 +731,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
                   <ProfileAvatar
                     name={current.displayName}
                     avatarUrl={current.avatarUrl}
-                    sizeClassName="h-14 w-14 sm:h-16 sm:w-16"
+                    sizeClassName="h-16 w-16 sm:h-20 sm:w-20"
                     textClassName="text-sm font-semibold text-zinc-100"
                     ringClassName="border-2 border-white bg-zinc-700/80 shadow-[0_12px_40px_rgba(0,0,0,0.2)] dark:border-zinc-950 dark:bg-zinc-800/60 dark:shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
                   />
@@ -1041,7 +1041,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
             </div>
           ) : null}
           {current.prompt2Question && current.prompt2Answer ? (
-            <div className="rounded-2xl border border-zinc-200/90 bg-zinc-50/95 p-4 dark:border-white/5 dark:bg-white/[0.03]">
+            <div className="hidden rounded-2xl border border-zinc-200/90 bg-zinc-50/95 p-4 dark:border-white/5 dark:bg-white/[0.03] sm:block">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-600 dark:text-zinc-500">
                 More from their profile
               </p>
@@ -1054,7 +1054,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
             </div>
           ) : null}
           {current.goal ? (
-            <div className="rounded-2xl border border-zinc-200/90 bg-zinc-50/95 p-4 dark:border-white/5 dark:bg-white/[0.03]">
+            <div className="hidden rounded-2xl border border-zinc-200/90 bg-zinc-50/95 p-4 dark:border-white/5 dark:bg-white/[0.03] sm:block">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-600 dark:text-zinc-500">
                 Current focus
               </p>
@@ -1116,8 +1116,8 @@ export function SwipeStack({ profiles, viewerId }: Props) {
         </div>
       ) : null}
 
-      <div className="mt-5 flex flex-col gap-3 sm:mt-6">
-        <div className="rounded-xl border border-zinc-300/80 bg-zinc-100/95 px-4 py-2.5 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:text-left dark:border-white/10 dark:bg-zinc-900/45">
+      <div className="mt-4 flex flex-col gap-2.5 sm:mt-6">
+        <div className="hidden rounded-xl border border-zinc-300/80 bg-zinc-100/95 px-4 py-2.5 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:text-left dark:border-white/10 dark:bg-zinc-900/45">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-600 dark:text-zinc-500">
             Quick actions
           </p>

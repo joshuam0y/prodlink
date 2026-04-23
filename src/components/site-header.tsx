@@ -170,7 +170,7 @@ export function SiteHeader({
                 alt="prodLink"
                 width={210}
                 height={55}
-                className="h-8 w-auto"
+                className="h-9 w-auto"
                 priority
               />
             </Link>
@@ -270,7 +270,7 @@ export function SiteHeader({
         </div>
       </header>
 
-      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-[100dvh] md:w-[248px] md:flex-col md:overflow-hidden md:px-3 md:py-3">
+      <aside className="hidden border-r border-white/10 bg-[var(--surface)]/92 md:sticky md:top-0 md:flex md:h-[100dvh] md:w-[252px] md:flex-col md:overflow-hidden md:px-3 md:py-3">
         <div className="flex min-h-0 w-full flex-1 flex-col gap-2.5">
           <Link href={brandHref} className="inline-flex shrink-0 self-start" aria-label="prodLink home">
             <Image
@@ -278,7 +278,7 @@ export function SiteHeader({
               alt="prodLink"
               width={210}
               height={55}
-              className="h-8 w-auto"
+              className="h-11 w-auto"
               priority
             />
           </Link>

@@ -89,6 +89,23 @@ export async function getLiveProfileCards(
     return [];
   }
 
+  const rowsWithWorkForCoreRoles = rows.filter((row) => {
+    const role = inferProfileRole(row.role);
+    if (role !== "producer" && role !== "dj" && role !== "engineer") return true;
+    const { starBeat, extraBeats } = beatsFromProfileRow({
+      id: row.id,
+      star_beat_title: row.star_beat_title ?? null,
+      star_beat_audio_url: row.star_beat_audio_url ?? null,
+      star_beat_cover_url: row.star_beat_cover_url ?? null,
+      extra_beats: row.extra_beats,
+    });
+    const hasAudioWork = Boolean(starBeat?.audioUrl) || Boolean((extraBeats ?? []).some((b) => Boolean(b.audioUrl)));
+    return hasAudioWork;
+  });
+  if (!rowsWithWorkForCoreRoles.length) {
+    return [];
+  }
+
   const tokenize = (...values: Array<string | null | undefined>) =>
     [...new Set(
       values
@@ -210,7 +227,7 @@ export async function getLiveProfileCards(
     return score;
   };
 
-  const rankedRows = [...rows].sort((a, b) => {
+  const rankedRows = [...rowsWithWorkForCoreRoles].sort((a, b) => {
     const byScore = rankScore(b) - rankScore(a);
     if (Math.abs(byScore) > 0.001) return byScore;
     return (b.updated_at ?? "").localeCompare(a.updated_at ?? "");

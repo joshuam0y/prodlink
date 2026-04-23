@@ -78,6 +78,24 @@ export function DiscoverFilterBar({
     router.replace(`${pathname}?${p.toString()}`, { scroll: false });
   };
 
+  if (!open) {
+    return (
+      <div className="mt-4 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-expanded={open}
+          className="inline-flex items-center gap-2 rounded-full border border-zinc-300/80 bg-white/90 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-800 shadow-sm transition hover:bg-zinc-100 dark:border-white/10 dark:bg-zinc-900/45 dark:text-zinc-200 dark:hover:bg-zinc-800/60"
+        >
+          Filters
+          <span className="rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] tracking-normal text-amber-900 dark:text-amber-200">
+            {activeCount}
+          </span>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <section className="mx-auto mt-6 max-w-3xl rounded-3xl border border-zinc-300/80 bg-white/90 text-left shadow-[0_16px_48px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-zinc-900/45 dark:shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
       <button
