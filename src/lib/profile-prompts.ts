@@ -11,6 +11,10 @@ export const CREATIVE_PROFILE_PROMPT_OPTIONS: ProfilePromptOption[] = [
   { question: "Right now I'm building toward...", cue: "Name the next chapter: gigs, placements, a tape, visuals, bookings, or growth." },
   { question: "A session with me usually looks like...", cue: "Paint the vibe: fast, experimental, polished, loud, late-night, focused." },
   { question: "My sound in three words...", cue: "Be specific and memorable instead of generic genre labels." },
+  {
+    question: "If your music was a color what would it be?",
+    cue: "Pick one color word (or hex code) that best represents your sound.",
+  },
   { question: "The artist I'd love to open for is...", cue: "Choose someone realistic or aspirational and explain the fit." },
   { question: "I'm most likely to link if you...", cue: "Set clear expectations for the kind of people and messages you respond to." },
   { question: "One thing people notice about my sets is...", cue: "Give a detail that makes your live presence feel real." },

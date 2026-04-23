@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { beatsFromProfileRow } from "@/lib/profile-beats";
+import { resolveMusicOutlineColor } from "@/lib/music-color";
 import type { ProfileCard, Role } from "@/lib/types";
 import { formatRoleLine } from "@/lib/role-label";
 
@@ -399,6 +400,12 @@ export async function getLiveProfileCards(
     if (row.verification_status === "verified" && verificationBadges.length === 0) {
       verificationBadges.push("Verified");
     }
+    const outlineColor = resolveMusicOutlineColor({
+      prompt1Question: row.prompt_1_question,
+      prompt1Answer: row.prompt_1_answer,
+      prompt2Question: row.prompt_2_question,
+      prompt2Answer: row.prompt_2_answer,
+    });
     return {
       id: row.id,
       displayName: name,
@@ -428,6 +435,7 @@ export async function getLiveProfileCards(
         : undefined,
       distanceKm,
       verificationBadges,
+      outlineColor,
     };
     });
 }

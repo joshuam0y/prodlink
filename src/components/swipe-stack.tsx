@@ -503,6 +503,13 @@ export function SwipeStack({ profiles, viewerId }: Props) {
         : { text: "LIKE", side: "right" as const, tone: "emerald" as const }
       : null;
   const stampOpacity = Math.min(1, Math.max(0, (absX - 26) / 90));
+  const outlineColor = current.outlineColor?.trim() || null;
+  const cardStyle = outlineColor
+    ? ({
+        borderColor: outlineColor,
+        boxShadow: `0 0 0 1px ${outlineColor}66, 0 24px 70px rgba(0,0,0,0.1)`,
+      } as const)
+    : undefined;
 
   return (
     <div className="relative mx-auto w-full max-w-2xl">
@@ -628,7 +635,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerEnd}
         onPointerCancel={onPointerEnd}
-        style={dragTransform}
+        style={{ ...dragTransform, ...cardStyle }}
         className={`relative z-10 h-[min(74dvh,660px)] min-h-[420px] sm:min-h-[500px] sm:h-auto touch-pan-y overflow-hidden rounded-[30px] border border-zinc-300/80 bg-[#f2efe9] text-zinc-900 shadow-[0_24px_70px_rgba(0,0,0,0.1)] select-none dark:border-white/10 dark:bg-zinc-900/60 dark:text-zinc-50 dark:shadow-[0_30px_100px_rgba(0,0,0,0.3)] ${
           dragging && !exitDir ? "cursor-grabbing" : "cursor-grab"
         } ${

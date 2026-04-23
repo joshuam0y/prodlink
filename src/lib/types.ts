@@ -47,6 +47,8 @@ export type ProfileCard = {
   /** They saved you on Discover; surfaced first in the stack. */
   likedYou?: boolean;
   verificationBadges?: string[];
+  /** Optional card outline accent derived from music color prompt. */
+  outlineColor?: string | null;
 };
 
 export type BeatBundle = {
