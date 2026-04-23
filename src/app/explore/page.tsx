@@ -228,6 +228,7 @@ export default async function ExplorePage({
               <Link
                 key={`recommended-${profile.id}`}
                 href={`/p/${profile.id}`}
+                prefetch={false}
                 className="flex gap-3 rounded-xl border border-zinc-300/80 bg-white/80 p-3 transition hover:border-zinc-400/90 hover:bg-white dark:border-white/10 dark:bg-zinc-950/40 dark:hover:border-white/20 dark:hover:bg-white/[0.03] sm:p-4"
               >
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-800 ring-1 ring-white/10">

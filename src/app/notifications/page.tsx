@@ -204,6 +204,7 @@ export default async function NotificationsPage() {
               <Link
                 key={`alert-recommendation-${profile.id}`}
                 href={`/p/${profile.id}`}
+                prefetch={false}
                 className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-zinc-950/40 px-4 py-3 transition hover:bg-white/[0.03]"
               >
                 <div className="min-w-0">

@@ -119,6 +119,7 @@ export default async function MatchConversationPage({ params, searchParams }: Pr
           </Link>
           <Link
             href={`/p/${id}`}
+            prefetch={false}
             className="flex min-w-0 flex-1 items-center gap-3 rounded-xl py-1 transition hover:bg-zinc-100/80 dark:hover:bg-white/[0.04]"
           >
             <ProfileAvatar

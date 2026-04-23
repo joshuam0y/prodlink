@@ -333,6 +333,7 @@ export default async function MatchesPage({
                 <div className="flex items-center justify-between border-t border-zinc-200/90 px-4 py-2 dark:border-white/5">
                   <Link
                     href={`/p/${id}`}
+                    prefetch={false}
                     className="text-xs font-medium text-zinc-600 transition hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-300"
                   >
                     View profile

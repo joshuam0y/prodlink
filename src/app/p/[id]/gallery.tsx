@@ -57,6 +57,7 @@ export function ProfileGalleryModal({
       <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between p-4">
         <Link
           href={`/p/${profileId}`}
+          prefetch={false}
           className="rounded-full border border-white/20 bg-zinc-900/70 px-4 py-2 text-sm text-zinc-100 hover:bg-zinc-900"
         >
           Close
@@ -113,6 +114,7 @@ export function ProfileAvatarModal({
     >
       <Link
         href={`/p/${profileId}`}
+        prefetch={false}
         className="absolute right-4 top-4 rounded-full border border-white/20 bg-zinc-900/70 px-4 py-2 text-sm text-zinc-100 hover:bg-zinc-900"
       >
         Close

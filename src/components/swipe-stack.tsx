@@ -779,6 +779,7 @@ export function SwipeStack({ profiles, viewerId }: Props) {
                 </span>
                 <Link
                   href={`/p/${current.id}`}
+                  prefetch={false}
                   className="text-[11px] font-semibold text-amber-800 underline-offset-4 hover:text-amber-950 hover:underline dark:text-amber-300 dark:hover:text-amber-200"
                 >
                   Full profile

@@ -180,6 +180,7 @@ export default async function LikesPage({
                       <div className="min-w-0 flex-1">
                         <Link
                           href={`/p/${id}`}
+                          prefetch={false}
                           className="font-semibold text-zinc-50 transition hover:text-amber-300"
                         >
                           {name}
@@ -256,6 +257,7 @@ export default async function LikesPage({
                   <div className="flex items-stretch gap-2 rounded-2xl border border-zinc-300/80 bg-white/90 p-2 pl-3 transition hover:border-zinc-400/80 hover:bg-zinc-100/80 dark:border-white/8 dark:bg-white/[0.03] dark:hover:border-white/15 dark:hover:bg-white/[0.05]">
                     <Link
                       href={`/p/${id}`}
+                      prefetch={false}
                       className="flex min-w-0 flex-1 items-center gap-3 py-1 pr-1"
                     >
                       <ProfileAvatar

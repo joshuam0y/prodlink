@@ -209,6 +209,7 @@ export default async function ProfilePage() {
         {!incomplete ? (
           <Link
             href={`/p/${user.id}`}
+            prefetch={false}
             className="inline-flex justify-center rounded-full border border-amber-500/35 bg-amber-500/10 px-5 py-2.5 text-sm font-medium text-amber-400 transition hover:bg-amber-500/20"
           >
             View public profile

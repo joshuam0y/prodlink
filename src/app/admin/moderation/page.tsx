@@ -353,6 +353,7 @@ export default async function ModerationAdminPage({
                     <div className="flex gap-2">
                       <Link
                         href={`/p/${p.id}`}
+                        prefetch={false}
                         className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-white/5"
                       >
                         Public profile
